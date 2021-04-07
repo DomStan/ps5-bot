@@ -19,7 +19,7 @@ from selenium.webdriver.firefox.options import Options
 options = Options()
 # option for headless mode
 options.add_argument("-headless")
-DRIVER = webdriver.Firefox(firefox_binary='/usr/bin/Xvfb', executable_path='./geckodriver', options=options)
+DRIVER = webdriver.Firefox(options=options)
 #
 
 # logging setup
