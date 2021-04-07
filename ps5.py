@@ -22,8 +22,8 @@ xvfb.start()
 
 options = Options()
 # option for headless mode
-options.add_argument("-headless")
-DRIVER = webdriver.Firefox(executable_path='./geckodriver', options=options)
+options.add_argument("--headless")
+DRIVER = webdriver.Firefox(firefox_binary='/usr/bin/firefox' executable_path='./geckodriver', options=options)
 #
 
 # logging setup
