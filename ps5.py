@@ -17,7 +17,7 @@ from selenium.webdriver.firefox.options import Options
 from xvfbwrapper import Xvfb
 
 # web driver setup
-xvfb = Xvfb(width=1280, height=720)
+xvfb = Xvfb(display=99)
 xvfb.start()
 
 options = Options()
