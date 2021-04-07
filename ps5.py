@@ -14,12 +14,16 @@ import requests
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.options import Options
+from xvfbwrapper import Xvfb
 
 # web driver setup
+xvfb = Xvfb(width=1280, height=720)
+xvfb.start()
+
 options = Options()
 # option for headless mode
 options.add_argument("-headless")
-DRIVER = webdriver.Firefox(options=options)
+DRIVER = webdriver.Firefox(firefox_binary='./firefox/firefox', executable_path='./geckodriver', options=options)
 #
 
 # logging setup
