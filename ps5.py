@@ -252,23 +252,24 @@ def yra_ps5(reason, page, price, edition, url):
     # playsound('notification.mp3')
     notify(title, message, url)
 
-def extract_price(element):
-    n_a = 'Price N/A'
+def extract_text(element):
+    empty = 'empty element'
     text = ''.join(map(lambda x: x.text, element)).strip()
     if text == '':
-        return n_a
+        return empty
     else:
         return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
     result_stock = driver.find_elements_by_xpath(stock_xpath)
     result_price = driver.find_elements_by_xpath(price_xpath)
-    extracted_price = extract_price(result_price)
+    extracted_price = extract_text(result_price)
     return (result_stock, extracted_price)
 
 
 def detect_amazon(stock, price, page_name, page_edition, page_url):
     text = stock[0].text.strip()
+    print(text)
     if text == "":
         return
     if page_name == PAGE_AMAZONPL:
@@ -376,6 +377,7 @@ while True:
             # except:
             #     yra_ps5('empty result', page.name, price, page.edition, page.url)
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
+            print(extract_text(stock))
             if len(stock) == 0 and check_addtocart(DRIVER, page.cart_xpath):
                 yra_ps5('empty result', page.name, price, page.edition, page.url)
 
