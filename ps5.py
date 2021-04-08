@@ -64,7 +64,7 @@ profile.set_preference("plugin.default_plugin_disabled", False)
 profile.set_preference("permissions.default.image", 2) # Image load disabled again
 profile.set_preference("http.response.timeout", 5)
 profile.set_preference("dom.max_script_run_time", 5)
-
+profile.set_preference("webgl.disabled", True)
 
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
 # DRIVER.implicitly_wait(3)
