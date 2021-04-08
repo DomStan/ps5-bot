@@ -13,6 +13,7 @@ import atexit
 import requests
 
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import InvalidSessionIdException
 from selenium.webdriver.firefox.options import Options
 from xvfbwrapper import Xvfb
 
@@ -25,6 +26,7 @@ options.add_argument("--headless")
 options.page_load_strategy = 'none'
 
 profile = webdriver.FirefoxProfile()
+profile.set_preference("network.cookie.cookieBehavior", 2)
 profile.set_preference("network.http.pipelining", True)
 profile.set_preference("network.http.proxy.pipelining", True)
 profile.set_preference("network.http.pipelining.maxrequests", 8)
@@ -61,6 +63,7 @@ profile.set_preference("permissions.default.image", 2) # Image load disabled aga
 profile.set_preference("http.response.timeout", 5)
 profile.set_preference("dom.max_script_run_time", 5)
 
+
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
 DRIVER.implicitly_wait(3)
 DRIVER.set_page_load_timeout(5)
@@ -87,6 +90,7 @@ def exit_handler():
     exit_message = "Application exiting..."
     logging.info(exit_message)
     notify(exit_message, 'Help!')
+    DRIVER.quit()
     # playsound('ding.mp3')
     sys.exit()
 
@@ -382,6 +386,14 @@ while True:
     for page in pages:
         try:
             DRIVER.get(page.url)
+        except InvalidSessionIdException:
+            msg = "Rebooting driver: " + str(exc)
+            print(msg)
+            logging.warning(msg)
+            DRIVER.quit()
+            DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
+            DRIVER.implicitly_wait(3)
+            DRIVER.set_page_load_timeout(5)
         except Exception:
             exc, _, _ = sys.exc_info()
             msg = "Loop skipped: " + str(exc)
