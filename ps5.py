@@ -17,12 +17,12 @@ from selenium.webdriver.firefox.options import Options
 from xvfbwrapper import Xvfb
 
 # web driver setup
-# xvfb = Xvfb(width=1280, height=720)
+# xvfb = Xvfb()
 # xvfb.start()
 
 options = Options()
 options.add_argument("--headless")
-options.page_load_strategy = 'eager'
+options.page_load_strategy = 'none'
 
 profile = webdriver.FirefoxProfile()
 profile.set_preference("network.http.pipelining", True)
@@ -62,14 +62,8 @@ profile.set_preference("http.response.timeout", 5)
 profile.set_preference("dom.max_script_run_time", 5)
 
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-# chrome_options = Options()
-# chrome_options.add_argument("--headless")
-# chrome_options.binary_location='/usr/bin/google-chrome'
-# DRIVER = webdriver.Chrome(options=chrome_options, executable_path='./chromedriver')
 DRIVER.implicitly_wait(3)
 DRIVER.set_page_load_timeout(5)
-# DRIVER.set_script_timeout(4)
-#
 
 # logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
