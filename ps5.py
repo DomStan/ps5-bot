@@ -60,7 +60,7 @@ profile.set_preference("permissions.default.image", 2) # Image load disabled aga
 
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
 DRIVER.set_page_load_timeout(5)
-# DRIVER.implicitly_wait(5)
+DRIVER.implicitly_wait(2)
 #
 
 # logging setup
