@@ -15,6 +15,8 @@ import requests
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import InvalidSessionIdException
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+
 from xvfbwrapper import Xvfb
 
 # web driver setup
@@ -65,7 +67,7 @@ profile.set_preference("dom.max_script_run_time", 5)
 
 
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-DRIVER.implicitly_wait(3)
+# DRIVER.implicitly_wait(3)
 DRIVER.set_page_load_timeout(5)
 
 # logging setup
@@ -125,7 +127,7 @@ PAGE_TOPO = 'Topocentras.lt'
 PAGE_TECHNO = 'Technorama.lt'
 PAGE_GAMEROOM = 'Gameroom.lt'
 
-TIME_SLEEP_BETWEEN_PAGES = 0
+TIME_SLEEP_BETWEEN_PAGES = 3
 TIME_SLEEP_BETWEEN_PAGES_AMAZON = 0
 TIME_SLEEP_BETWEEN_LOOPS = 0
 TIME_SLEEP_AFTER_CLICK_RANGE = (0.5, 0.5)
@@ -304,7 +306,8 @@ def extract_text(element):
         return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
-    result_stock = driver.find_elements_by_xpath(stock_xpath)
+    result_stock = WebDriverWait(driver).until(lambda d: d.find_elements_by_xpath(stock_xpath))
+    # result_stock = driver.find_elements_by_xpath(stock_xpath)
     result_price = driver.find_elements_by_xpath(price_xpath)
     extracted_price = extract_text(result_price)
     return (result_stock, extracted_price)
@@ -394,6 +397,7 @@ while True:
             DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
             DRIVER.implicitly_wait(3)
             DRIVER.set_page_load_timeout(5)
+            continue
         except Exception:
             exc, _, _ = sys.exc_info()
             msg = "Loop skipped: " + str(exc)
@@ -401,6 +405,7 @@ while True:
             logging.warning(msg)
             continue
 
+        # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
         #     time.sleep(TIME_SLEEP_AMAZON)
             # if not tryclickncheck(driver, page.sed_button_xpath, page.stock_xpath, page.price_xpath, page.name):
