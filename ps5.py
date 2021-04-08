@@ -404,7 +404,6 @@ while True:
             msg = "Rebooting driver: " + str(exc)
             print(msg)
             logging.warning(msg)
-            global DRIVER
             DRIVER.quit()
             DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
             continue
