@@ -12,6 +12,7 @@ import atexit
 
 import requests
 
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.options import Options
 from xvfbwrapper import Xvfb
