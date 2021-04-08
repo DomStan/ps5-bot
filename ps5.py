@@ -22,7 +22,7 @@ from xvfbwrapper import Xvfb
 
 options = Options()
 # option for headless mode
-options.add_argument("--headless")
+options.add_argument("-headless")
 DRIVER = webdriver.Firefox(firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
 DRIVER.set_page_load_timeout(5)
 DRIVER.implicitly_wait(5)
