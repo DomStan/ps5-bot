@@ -399,6 +399,7 @@ while True:
             DRIVER.get(page.url)
         # except InvalidSessionIdException:
         except Exception:
+            exc, _, _ = sys.exc_info()
             msg = "Rebooting driver: " + str(exc)
             print(msg)
             logging.warning(msg)
