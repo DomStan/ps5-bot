@@ -61,7 +61,7 @@ from xvfbwrapper import Xvfb
 # DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-DRIVER = webdriver.Chrome(chrome_options=chrome_options, executable_path='./chromedriver')
+DRIVER = webdriver.Chrome(options=chrome_options, executable_path='./chromedriver')
 # DRIVER.implicitly_wait(4)
 DRIVER.set_page_load_timeout(5)
 # DRIVER.set_script_timeout(4)
