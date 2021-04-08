@@ -397,23 +397,24 @@ while True:
             DRIVER.set_page_load_timeout(5)
             DRIVER.implicitly_wait(2)
             DRIVER.get(page.url)
-        except InvalidSessionIdException:
+        # except InvalidSessionIdException:
+        except Exception:
             msg = "Rebooting driver: " + str(exc)
             print(msg)
             logging.warning(msg)
-            DRIVER.execute_script("window.stop();")
+            # DRIVER.execute_script("window.stop();")
             DRIVER.quit()
             DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
             # DRIVER.implicitly_wait(3)
             # DRIVER.set_page_load_timeout(5)
             continue
-        except Exception:
-            exc, _, _ = sys.exc_info()
-            msg = "Loop skipped: " + str(exc)
-            print(msg)
-            logging.warning(msg)
-            DRIVER.execute_script("window.stop();")
-            continue
+        # except Exception:
+        #     exc, _, _ = sys.exc_info()
+        #     msg = "Loop skipped: " + str(exc)
+        #     print(msg)
+        #     logging.warning(msg)
+        #     DRIVER.execute_script("window.stop();")
+        #     continue
 
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
