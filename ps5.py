@@ -336,6 +336,7 @@ def check_addtocart(driver, cart_xpath):
         return True
 
 logging.info("Starting loop...")
+print("Starting loop...")
 while True:
     start = time.time()
     for page in pages:
@@ -343,7 +344,9 @@ while True:
             DRIVER.get(page.url)
         except Exception:
             exc, _, _ = sys.exc_info()
-            logging.warning("Loop skipped: " + str(exc))
+            msg = "Loop skipped: " + str(exc)
+            print(msg)
+            logging.warning(msg)
             continue
 
         # if page.name in (PAGE_AMAZONDE):
@@ -382,5 +385,7 @@ while True:
                 yra_ps5('empty result', page.name, price, page.edition, page.url)
 
     end = time.time()
-    logging.info("Loop pass completed (" + str(round(end-start)) + "s)")
+    msg = "Loop pass completed (" + str(round(end-start)) + "s)"
+    print(msg)
+    logging.info(msg)
     time.sleep(TIME_SLEEP_BETWEEN_LOOPS)
