@@ -21,7 +21,7 @@ from xvfbwrapper import Xvfb
 # xvfb = Xvfb()
 # xvfb.start()
 
-dcap = DesiredCapabilities()
+dcap = DesiredCapabilities.FIREFOX.copy()
 dcap['pageLoadStrategy'] = 'none'
 
 options = Options()
