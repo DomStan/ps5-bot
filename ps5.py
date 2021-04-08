@@ -272,6 +272,7 @@ def stock_price_from_xpath(driver, stock_xpath, price_xpath):
 def detect_amazon(stock, price, page_name, page_edition, page_url):
     text = stock[0].text.strip()
     print(text)
+    logging.info(text)
     if text == "":
         return
     if page_name == PAGE_AMAZONPL:
@@ -382,7 +383,9 @@ while True:
             # except:
             #     yra_ps5('empty result', page.name, price, page.edition, page.url)
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
-            print(extract_text(stock))
+            msg = extract_text(stock)
+            print(msg)
+            logging.info(msg)
             if len(stock) == 0 and check_addtocart(DRIVER, page.cart_xpath):
                 yra_ps5('empty result', page.name, price, page.edition, page.url)
 
