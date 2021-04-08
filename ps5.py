@@ -17,8 +17,8 @@ from selenium.webdriver.firefox.options import Options
 from xvfbwrapper import Xvfb
 
 # web driver setup
-xvfb = Xvfb(width=1280, height=720)
-xvfb.start()
+# xvfb = Xvfb(width=1280, height=720)
+# xvfb.start()
 
 options = Options()
 # option for headless mode
@@ -83,6 +83,7 @@ PAGE_TECHNO = 'Technorama.lt'
 PAGE_GAMEROOM = 'Gameroom.lt'
 
 TIME_SLEEP_BETWEEN_PAGES = 3
+TIME_SLEEP_BETWEEN_PAGES_AMAZON = 1
 TIME_SLEEP_BETWEEN_LOOPS = 0
 TIME_SLEEP_AFTER_CLICK_RANGE = (0.5, 0.5)
 
@@ -344,7 +345,6 @@ while True:
             logging.warning("Loop skipped: " + str(exc))
             continue
 
-        time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
         #     time.sleep(TIME_SLEEP_AMAZON)
             # if not tryclickncheck(driver, page.sed_button_xpath, page.stock_xpath, page.price_xpath, page.name):
@@ -357,10 +357,12 @@ while True:
             #     tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name)
 
         if isinstance(page, AmazonPage):
+            time.sleep(TIME_SLEEP_BETWEEN_PAGES_AMAZON)
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
             detect_amazon(stock, price, page.name, page.edition, page.url)
 
         elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
+            time.sleep(TIME_SLEEP_BETWEEN_PAGES)
             # try:
             #     msg = driver.find_element_by_xpath(page.stock_xpath).text
             #     if 'parduota' not in msg:
