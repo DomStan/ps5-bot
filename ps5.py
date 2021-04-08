@@ -59,9 +59,9 @@ profile.set_preference("plugin.default_plugin_disabled", False)
 profile.set_preference("permissions.default.image", 2) # Image load disabled again
 
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-DRIVER.set_page_load_timeout(5)
-DRIVER.implicitly_wait(3)
-DRIVER.set_script_timeout(5)
+DRIVER.implicitly_wait(4)
+DRIVER.set_page_load_timeout(4)
+DRIVER.set_script_timeout(4)
 #
 
 # logging setup
