@@ -24,8 +24,8 @@ options = Options()
 # option for headless mode
 options.add_argument("--headless")
 DRIVER = webdriver.Firefox(firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-DRIVER.set_page_load_timeout(5)
-DRIVER.implicitly_wait(5)
+DRIVER.set_page_load_timeout(4)
+DRIVER.implicitly_wait(4)
 #
 
 # logging setup
@@ -84,8 +84,8 @@ PAGE_TOPO = 'Topocentras.lt'
 PAGE_TECHNO = 'Technorama.lt'
 PAGE_GAMEROOM = 'Gameroom.lt'
 
-TIME_SLEEP_BETWEEN_PAGES = 3
-TIME_SLEEP_BETWEEN_PAGES_AMAZON = 1
+TIME_SLEEP_BETWEEN_PAGES = 0
+TIME_SLEEP_BETWEEN_PAGES_AMAZON = 0
 TIME_SLEEP_BETWEEN_LOOPS = 0
 TIME_SLEEP_AFTER_CLICK_RANGE = (0.5, 0.5)
 
@@ -363,12 +363,12 @@ while True:
             #     tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name)
 
         if isinstance(page, AmazonPage):
-            time.sleep(TIME_SLEEP_BETWEEN_PAGES_AMAZON)
+            # time.sleep(TIME_SLEEP_BETWEEN_PAGES_AMAZON)
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
             detect_amazon(stock, price, page.name, page.edition, page.url)
 
         elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
-            time.sleep(TIME_SLEEP_BETWEEN_PAGES)
+            # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
             # try:
             #     msg = driver.find_element_by_xpath(page.stock_xpath).text
             #     if 'parduota' not in msg:
@@ -390,4 +390,4 @@ while True:
     msg = "Loop pass completed (" + str(round(end-start)) + "s)"
     print(msg)
     logging.info(msg)
-    time.sleep(TIME_SLEEP_BETWEEN_LOOPS)
+    # time.sleep(TIME_SLEEP_BETWEEN_LOOPS)
