@@ -24,8 +24,8 @@ options = Options()
 # option for headless mode
 options.add_argument("--headless")
 DRIVER = webdriver.Firefox(firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-DRIVER.set_page_load_timeout(4)
-DRIVER.implicitly_wait(4)
+DRIVER.set_page_load_timeout(5)
+DRIVER.implicitly_wait(5)
 #
 
 # logging setup
