@@ -390,11 +390,12 @@ def check_addtocart(driver, cart_xpath):
 logging.info("Starting loop...")
 print("Starting loop...")
 while True:
+    time.sleep(randinrange([0, 1]))
     start = time.time()
     for page in pages:
         try:
             DRIVER.set_page_load_timeout(5)
-            DRIVER.implicitly_wait(3)
+            DRIVER.implicitly_wait(2)
             DRIVER.get(page.url)
         except InvalidSessionIdException:
             msg = "Rebooting driver: " + str(exc)
