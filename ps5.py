@@ -306,7 +306,11 @@ def extract_text(element):
         return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
-    result_stock = WebDriverWait(driver, 3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
+    result_stock = []
+    try:
+        result_stock = WebDriverWait(driver, 3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
+    except Exception:
+        pass
     # result_stock = driver.find_elements_by_xpath(stock_xpath)
     result_price = driver.find_elements_by_xpath(price_xpath)
     extracted_price = extract_text(result_price)
