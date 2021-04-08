@@ -12,7 +12,6 @@ import atexit
 
 import requests
 
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.options import Options
 from xvfbwrapper import Xvfb
@@ -62,7 +61,7 @@ profile.set_preference("permissions.default.image", 2) # Image load disabled aga
 profile.set_preference("http.response.timeout", 5)
 profile.set_preference("dom.max_script_run_time", 5)
 
-DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox',  executable_path='./geckodriver', options=options)
+DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
 DRIVER.implicitly_wait(3)
 DRIVER.set_page_load_timeout(5)
 
