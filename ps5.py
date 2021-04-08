@@ -404,9 +404,10 @@ while True:
             msg = "Rebooting driver: " + str(exc)
             print(msg)
             logging.warning(msg)
-            DRIVER.quit()
-            DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-            continue
+            DRIVER.refresh()
+            # DRIVER.quit()
+            # DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
+            # continue
         # except Exception:
         #     exc, _, _ = sys.exc_info()
         #     msg = "Loop skipped: " + str(exc)
