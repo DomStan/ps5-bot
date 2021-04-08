@@ -26,7 +26,7 @@ options.add_argument("--headless")
 options.page_load_strategy = 'none'
 
 profile = webdriver.FirefoxProfile()
-profile.set_preference("network.cookie.cookieBehavior", 2)
+profile.set_preference("browser.privatebrowsing.autostart", True)
 profile.set_preference("network.http.pipelining", True)
 profile.set_preference("network.http.proxy.pipelining", True)
 profile.set_preference("network.http.pipelining.maxrequests", 8)
@@ -65,7 +65,7 @@ profile.set_preference("dom.max_script_run_time", 5)
 
 
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-DRIVER.implicitly_wait(4)
+DRIVER.implicitly_wait(3)
 DRIVER.set_page_load_timeout(5)
 
 # logging setup
