@@ -393,7 +393,8 @@ while True:
     start = time.time()
     for page in pages:
         try:
-            DRIVER.set_page_load_timeout(2)
+            # DRIVER.set_page_load_timeout(2)
+            DRIVER.implicitly_wait(3)
             DRIVER.get(page.url)
         except InvalidSessionIdException:
             msg = "Rebooting driver: " + str(exc)
@@ -401,8 +402,8 @@ while True:
             logging.warning(msg)
             DRIVER.quit()
             DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-            DRIVER.implicitly_wait(3)
-            DRIVER.set_page_load_timeout(5)
+            # DRIVER.implicitly_wait(3)
+            # DRIVER.set_page_load_timeout(5)
             continue
         except Exception:
             exc, _, _ = sys.exc_info()
