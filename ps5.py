@@ -22,6 +22,7 @@ from xvfbwrapper import Xvfb
 
 options = Options()
 options.add_argument("--headless")
+options.page_load_strategy = 'eager'
 
 profile = webdriver.FirefoxProfile()
 profile.set_preference("network.http.pipelining", True)
