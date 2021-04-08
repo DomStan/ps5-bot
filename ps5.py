@@ -393,6 +393,7 @@ while True:
     start = time.time()
     for page in pages:
         try:
+            DRIVER.set_page_load_timeout(3)
             DRIVER.get(page.url)
         except InvalidSessionIdException:
             msg = "Rebooting driver: " + str(exc)
