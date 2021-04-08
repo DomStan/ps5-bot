@@ -404,13 +404,9 @@ while True:
             msg = "Rebooting driver: " + str(exc)
             print(msg)
             logging.warning(msg)
-            # DRIVER.execute_script("window.stop();")
             global DRIVER
             DRIVER.quit()
-            DRIVER = webdriver.Firefox(firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-            DRIVER.firefox_profile = profile
-            # DRIVER.implicitly_wait(3)
-            # DRIVER.set_page_load_timeout(5)
+            DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
             continue
         # except Exception:
         #     exc, _, _ = sys.exc_info()
