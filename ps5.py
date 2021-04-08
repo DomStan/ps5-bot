@@ -62,7 +62,7 @@ profile.set_preference("extensions.update.enabled", False)
 profile.set_preference("general.startup.browser", False)
 profile.set_preference("plugin.default_plugin_disabled", False)
 profile.set_preference("permissions.default.image", 2) # Image load disabled again
-profile.set_preference("http.response.timeout", 5)
+# profile.set_preference("http.response.timeout", 5)
 profile.set_preference("dom.max_script_run_time", 5)
 profile.set_preference("webgl.disabled", True)
 
