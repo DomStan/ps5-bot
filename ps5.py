@@ -398,6 +398,7 @@ while True:
             DRIVER.implicitly_wait(2)
             DRIVER.get(page.url)
         except InvalidSessionIdException:
+            DRIVER.execute_script("window.stop();")
             msg = "Rebooting driver: " + str(exc)
             print(msg)
             logging.warning(msg)
@@ -407,6 +408,7 @@ while True:
             # DRIVER.set_page_load_timeout(5)
             continue
         except Exception:
+            DRIVER.execute_script("window.stop();")
             exc, _, _ = sys.exc_info()
             msg = "Loop skipped: " + str(exc)
             print(msg)
