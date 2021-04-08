@@ -21,9 +21,6 @@ from xvfbwrapper import Xvfb
 # xvfb = Xvfb()
 # xvfb.start()
 
-dcap = DesiredCapabilities.FIREFOX.copy()
-dcap['pageLoadStrategy'] = 'none'
-
 options = Options()
 options.add_argument("--headless")
 options.page_load_strategy = 'none'
@@ -65,7 +62,7 @@ profile.set_preference("permissions.default.image", 2) # Image load disabled aga
 profile.set_preference("http.response.timeout", 5)
 profile.set_preference("dom.max_script_run_time", 5)
 
-DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', capabilities=dcap, executable_path='./geckodriver', options=options)
+DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox',  executable_path='./geckodriver', options=options)
 DRIVER.implicitly_wait(3)
 DRIVER.set_page_load_timeout(5)
 
