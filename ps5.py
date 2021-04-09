@@ -381,6 +381,7 @@ def check_addtocart(driver, cart_xpath):
         return True
 
 def handler(signum, frame):
+    logging.warning("Function call timed out.")
     raise Exception("Function call timed out.")
 
 logging.info("Starting loop...")
@@ -390,7 +391,7 @@ while True:
     for page in pages:
         try:
             signal.signal(signal.SIGALRM, handler)
-            signal.alarm(5)
+            signal.alarm(8)
             DRIVER.get(page.url)
         except InvalidSessionIdException:
             print("Restarting program...")
@@ -401,7 +402,7 @@ while True:
             msg = "Refreshing page: " + str(exc)
             print(msg)
             logging.warning(msg)
-            DRIVER.refresh()
+            continue
 
         # time.sleep(randinrange([0, 1]))
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
