@@ -307,7 +307,6 @@ def stock_price_from_xpath(driver, stock_xpath, price_xpath):
     try:
         result_stock = WebDriverWait(driver, timeout=5).until(lambda d: d.find_element_by_xpath(stock_xpath))
         result_stock = [result_stock]
-        driver.execute_script("window.stop();")
     except Exception:
         pass
     result_price = driver.find_elements_by_xpath(price_xpath)
@@ -402,7 +401,7 @@ while True:
             logging.warning(msg)
             DRIVER.refresh()
 
-        time.sleep(randinrange([2, 3]))
+        time.sleep(randinrange([0, 1]))
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
         #     time.sleep(TIME_SLEEP_AMAZON)
