@@ -32,10 +32,10 @@ profile = webdriver.FirefoxProfile()
 profile.set_preference("browser.privatebrowsing.autostart", True)
 profile.set_preference("network.http.pipelining", True)
 profile.set_preference("network.http.proxy.pipelining", True)
-# profile.set_preference("network.http.pipelining.maxrequests", 8)
-# profile.set_preference("content.notify.interval", 500000)
+profile.set_preference("network.http.pipelining.maxrequests", 8)
+profile.set_preference("content.notify.interval", 500000)
 profile.set_preference("content.notify.ontimer", True)
-# profile.set_preference("content.switch.threshold", 250000)
+profile.set_preference("content.switch.threshold", 250000)
 profile.set_preference("browser.cache.memory.capacity", 65536) # Increase the cache capacity.
 profile.set_preference("browser.startup.homepage", "about:blank")
 profile.set_preference("reader.parse-on-load.enabled", False) # Disable reader, we won't need that.
@@ -45,7 +45,6 @@ profile.set_preference("browser.chrome.toolbar_style", 1) # Text on Toolbar inst
 profile.set_preference("browser.display.show_image_placeholders", False) # Don't show thumbnails on not loaded images.
 profile.set_preference("browser.display.use_document_colors", False) # Don't show document colors.
 profile.set_preference("browser.display.use_document_fonts", 0) # Don't load document fonts.
-# profile.set_preference("browser.display.use_system_colors", True) # Use system colors.
 profile.set_preference("browser.formfill.enable", False) # Autofill on forms disabled.
 profile.set_preference("browser.helperApps.deleteTempFileOnExit", True) # Delete temprorary files.
 profile.set_preference("browser.shell.checkDefaultBrowser", False)
@@ -69,7 +68,7 @@ profile.set_preference("webgl.disabled", True)
 
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-DRIVER.set_page_load_timeout(5)
+DRIVER.set_page_load_timeout(3)
 
 # logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -212,14 +211,14 @@ PAGE_TOPO,
 # "//*[@id='a-autoid-16-announce']",
 # "//*[@id='a-autoid-17-announce']"))
 
-# pages.append(AmazonPage(
-# "Digital",
-# PAGE_AMAZONPL,
-# "https://www.amazon.pl/Sony-PlayStation-5-Digital-Edition/dp/B08H98GVK8",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-16-announce']",
-# "//*[@id='a-autoid-17-announce']"))
+pages.append(AmazonPage(
+"Digital",
+PAGE_AMAZONPL,
+"https://www.amazon.pl/Sony-PlayStation-5-Digital-Edition/dp/B08H98GVK8",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']",
+"//*[@id='a-autoid-16-announce']",
+"//*[@id='a-autoid-17-announce']"))
 #
 # pages.append(AmazonPage(
 # "Standard",
@@ -248,14 +247,14 @@ PAGE_AMAZONIT,
 # "//*[@id='a-autoid-13-announce']",
 # "//*[@id='a-autoid-14-announce']"))
 #
-pages.append(AmazonPage(
-"Digital",
-PAGE_AMAZONES,
-"https://www.amazon.es/dp/B08KJF2D25",
-"//*[@id='availability']/span",
-"//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-13-announce']",
-"//*[@id='a-autoid-14-announce']"))
+# pages.append(AmazonPage(
+# "Digital",
+# PAGE_AMAZONES,
+# "https://www.amazon.es/dp/B08KJF2D25",
+# "//*[@id='availability']/span",
+# "//*[@id='priceblock_ourprice']",
+# "//*[@id='a-autoid-13-announce']",
+# "//*[@id='a-autoid-14-announce']"))
 
 # pages.append(AmazonPage(
 # PAGE_AMAZONFR,
