@@ -8,6 +8,7 @@ import random
 from datetime import date
 import logging
 import sys
+import os
 import atexit
 
 import requests
@@ -68,8 +69,7 @@ profile.set_preference("webgl.disabled", True)
 
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-# DRIVER.implicitly_wait(3)
-# DRIVER.set_page_load_timeout(1)
+DRIVER.set_page_load_timeout(5)
 
 # logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -92,9 +92,8 @@ def notify(title, message, url=None):
 def exit_handler():
     exit_message = "Application exiting..."
     logging.info(exit_message)
-    notify(exit_message, 'Help!')
+    notify(exit_message, 'Bye!')
     DRIVER.quit()
-    # playsound('ding.mp3')
     sys.exit()
 
 atexit.register(exit_handler)
@@ -295,7 +294,6 @@ def yra_ps5(reason, page, price, edition, url):
     logging.info(print_text)
     print(print_text)
 
-    # playsound('notification.mp3')
     notify(title, message, url)
 
 def extract_text(element):
@@ -307,13 +305,12 @@ def extract_text(element):
         return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
-    result_stock = []
+    result_stock = ""
     try:
-        result_stock = WebDriverWait(driver, 3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
+        result_stock = WebDriverWait(driver, timeout=3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
         driver.execute_script("window.stop();")
     except Exception:
         pass
-    # result_stock = driver.find_elements_by_xpath(stock_xpath)
     result_price = driver.find_elements_by_xpath(price_xpath)
     extracted_price = extract_text(result_price)
     return (result_stock, extracted_price)
@@ -395,26 +392,18 @@ while True:
     start = time.time()
     for page in pages:
         try:
-            DRIVER.set_page_load_timeout(5)
-            DRIVER.implicitly_wait(2)
-            DRIVER.get(page.url)
-        # except InvalidSessionIdException:
+            DRIVER.navigate(page.url)
+        except InvalidSessionIdException:
+            print("Restarting program...")
+            logging.warning("Restarting program...")
+            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         except Exception:
             exc, _, _ = sys.exc_info()
-            msg = "Rebooting driver: " + str(exc)
+            msg = "Refreshing page: " + str(exc)
             print(msg)
             logging.warning(msg)
+            DRIVER.execute_script("window.stop();")
             DRIVER.refresh()
-            # DRIVER.quit()
-            # DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-            # continue
-        # except Exception:
-        #     exc, _, _ = sys.exc_info()
-        #     msg = "Loop skipped: " + str(exc)
-        #     print(msg)
-        #     logging.warning(msg)
-        #     DRIVER.execute_script("window.stop();")
-        #     continue
 
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
@@ -458,4 +447,4 @@ while True:
     msg = "Loop pass completed (" + str(round(end-start)) + "s)"
     print(msg)
     logging.info(msg)
-    # time.sleep(TIME_SLEEP_BETWEEN_LOOPS)
+    DRIVER.delete_all_cookies()
