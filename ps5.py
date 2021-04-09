@@ -387,7 +387,6 @@ def check_addtocart(driver, cart_xpath):
 logging.info("Starting loop...")
 print("Starting loop...")
 while True:
-    time.sleep(randinrange([0, 1]))
     start = time.time()
     for page in pages:
         try:
@@ -404,6 +403,7 @@ while True:
             DRIVER.execute_script("window.stop();")
             DRIVER.refresh()
 
+        time.sleep(randinrange([2, 3]))
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
         #     time.sleep(TIME_SLEEP_AMAZON)
