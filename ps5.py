@@ -140,7 +140,6 @@ PAGE_TOPO,
 "https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5-digital.html",
 "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
 "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
-
 # pages.append(Page(
 # "Standard",
 # PAGE_TOPO,
@@ -307,7 +306,7 @@ def extract_text(element):
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
     result_stock = ""
     try:
-        result_stock = WebDriverWait(driver, timeout=3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
+        result_stock = WebDriverWait(driver, timeout=5).until(lambda d: d.find_element_by_xpath(stock_xpath))
         driver.execute_script("window.stop();")
     except Exception:
         pass
