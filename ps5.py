@@ -395,7 +395,6 @@ while True:
             signal.signal(signal.SIGALRM, handler)
             signal.alarm(5)
             DRIVER.get(page.url)
-            signal.alarm(0)
         except InvalidSessionIdException:
             print("Restarting program...")
             logging.warning("Restarting program...")
@@ -407,6 +406,7 @@ while True:
             logging.warning(msg)
             continue
 
+        signal.alarm(0)
         # time.sleep(randinrange([0, 1]))
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
