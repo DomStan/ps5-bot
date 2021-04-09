@@ -388,7 +388,7 @@ def check_addtocart(driver, cart_xpath):
 logging.info("Starting loop...")
 print("Starting loop...")
 while True:
-    with DRIVER as webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options):
+    with webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options) as DRIVER:
         DRIVER.set_page_load_timeout(3)
         DRIVER.implicitly_wait(1)
         start = time.time()
