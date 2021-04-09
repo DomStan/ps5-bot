@@ -448,3 +448,4 @@ while True:
         print(msg)
         logging.info(msg)
         DRIVER.quit()
+        DRIVER.stop_client()
