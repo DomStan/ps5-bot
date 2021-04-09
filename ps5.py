@@ -401,7 +401,6 @@ while True:
             msg = "Refreshing page: " + str(exc)
             print(msg)
             logging.warning(msg)
-            DRIVER.execute_script("window.stop();")
             DRIVER.refresh()
 
         time.sleep(randinrange([2, 3]))
