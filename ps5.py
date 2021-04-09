@@ -10,7 +10,7 @@ import logging
 import sys
 import os
 import atexit
-from subprocess import check_output
+import signal
 
 import requests
 
@@ -18,12 +18,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import InvalidSessionIdException
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
-
-from xvfbwrapper import Xvfb
-
-# web driver setup
-# xvfb = Xvfb()
-# xvfb.start()
 
 options = Options()
 options.add_argument("--headless")
@@ -386,13 +380,18 @@ def check_addtocart(driver, cart_xpath):
     else:
         return True
 
+def handler(signum, frame):
+    raise Exception("Function call timed out.")
+
 logging.info("Starting loop...")
 print("Starting loop...")
 while True:
     start = time.time()
     for page in pages:
         try:
-            output = check_output(DRIVER.get(page.url), timeout=3)
+            signal.signal(signal.SIGALRM, handler)
+            DRIVER.get(page.url)
+            signal.alarm(3)
         except InvalidSessionIdException:
             print("Restarting program...")
             logging.warning("Restarting program...")
