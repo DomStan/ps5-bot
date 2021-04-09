@@ -10,6 +10,7 @@ import logging
 import sys
 import os
 import atexit
+from subprocess import check_output
 
 import requests
 
@@ -66,10 +67,10 @@ profile.set_preference("http.response.timeout", 5)
 profile.set_preference("dom.max_script_run_time", 5)
 profile.set_preference("webgl.disabled", True)
 
-# global DRIVER
-# DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-# DRIVER.set_page_load_timeout(3)
-# DRIVER.implicitly_wait(1)
+global DRIVER
+DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
+DRIVER.set_page_load_timeout(3)
+DRIVER.implicitly_wait(1)
 
 # logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -388,64 +389,60 @@ def check_addtocart(driver, cart_xpath):
 logging.info("Starting loop...")
 print("Starting loop...")
 while True:
-    with webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options) as DRIVER:
-        DRIVER.set_page_load_timeout(3)
-        DRIVER.implicitly_wait(1)
-        start = time.time()
-        for page in pages:
-            try:
-                DRIVER.get(page.url)
-            except InvalidSessionIdException:
-                print("Restarting program...")
-                logging.warning("Restarting program...")
-                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
-            except Exception:
-                exc, _, _ = sys.exc_info()
-                msg = "Refreshing page: " + str(exc)
-                print(msg)
-                logging.warning(msg)
-                DRIVER.refresh()
+    start = time.time()
+    for page in pages:
+        try:
+            output = check_output(DRIVER.get(page.url), timeout=3)
+        except InvalidSessionIdException:
+            print("Restarting program...")
+            logging.warning("Restarting program...")
+            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+        except Exception:
+            exc, _, _ = sys.exc_info()
+            msg = "Refreshing page: " + str(exc)
+            print(msg)
+            logging.warning(msg)
+            DRIVER.refresh()
 
-            # time.sleep(randinrange([0, 1]))
-            # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
-            # if page.name in (PAGE_AMAZONDE):
-            #     time.sleep(TIME_SLEEP_AMAZON)
-                # if not tryclickncheck(driver, page.sed_button_xpath, page.stock_xpath, page.price_xpath, page.name):
-                #     logging.warning("Retrying Amazon click and check...")
-                #     tryclickncheck(driver, page.sed_button_xpath, page.stock_xpath, page.price_xpath, page.name)
+        # time.sleep(randinrange([0, 1]))
+        # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
+        # if page.name in (PAGE_AMAZONDE):
+        #     time.sleep(TIME_SLEEP_AMAZON)
+            # if not tryclickncheck(driver, page.sed_button_xpath, page.stock_xpath, page.price_xpath, page.name):
+            #     logging.warning("Retrying Amazon click and check...")
+            #     tryclickncheck(driver, page.sed_button_xpath, page.stock_xpath, page.price_xpath, page.name)
 
-                # tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name)
-                # if not tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name):
-                #     logging.warning("Retrying Amazon click and check...")
-                #     tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name)
+            # tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name)
+            # if not tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name):
+            #     logging.warning("Retrying Amazon click and check...")
+            #     tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name)
 
-            if isinstance(page, AmazonPage):
-                stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
-                detect_amazon(stock, price, page.name, page.edition, page.url)
+        if isinstance(page, AmazonPage):
+            stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
+            detect_amazon(stock, price, page.name, page.edition, page.url)
 
-            elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
-                # try:
-                #     msg = driver.find_element_by_xpath(page.stock_xpath).text
-                #     if 'parduota' not in msg:
-                #         yra_ps5('empty result', page.name, price, page.edition, page.url)
-                # except:
-                #     yra_ps5('empty result', page.name, "", page.edition, page.url)
-                # try:
-                #     msg = driver.find_element_by_xpath(page.price_xpath).text
-                #     if '17' not in msg:
-                #         yra_ps5('empty result', page.name, "", page.edition, page.url)
-                # except:
-                #     yra_ps5('empty result', page.name, price, page.edition, page.url)
-                stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
-                msg = extract_text(stock)
-                print(msg)
-                logging.info(msg)
-                if stock[0]=="" and check_addtocart(DRIVER, page.cart_xpath):
-                    yra_ps5('empty result', page.name, price, page.edition, page.url)
+        elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
+            # try:
+            #     msg = driver.find_element_by_xpath(page.stock_xpath).text
+            #     if 'parduota' not in msg:
+            #         yra_ps5('empty result', page.name, price, page.edition, page.url)
+            # except:
+            #     yra_ps5('empty result', page.name, "", page.edition, page.url)
+            # try:
+            #     msg = driver.find_element_by_xpath(page.price_xpath).text
+            #     if '17' not in msg:
+            #         yra_ps5('empty result', page.name, "", page.edition, page.url)
+            # except:
+            #     yra_ps5('empty result', page.name, price, page.edition, page.url)
+            stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
+            msg = extract_text(stock)
+            print(msg)
+            logging.info(msg)
+            if stock[0]=="" and check_addtocart(DRIVER, page.cart_xpath):
+                yra_ps5('empty result', page.name, price, page.edition, page.url)
 
-        end = time.time()
-        msg = "Loop pass completed (" + str(round(end-start)) + "s)"
-        print(msg)
-        logging.info(msg)
-        DRIVER.quit()
-        # DRIVER.stop_client()
+    end = time.time()
+    msg = "Loop pass completed (" + str(round(end-start)) + "s)"
+    print(msg)
+    logging.info(msg)
+    DRIVER.delete_all_cookies()
