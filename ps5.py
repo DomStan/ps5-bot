@@ -447,5 +447,5 @@ while True:
         msg = "Loop pass completed (" + str(round(end-start)) + "s)"
         print(msg)
         logging.info(msg)
-        # DRIVER.quit()
+        DRIVER.quit()
         # DRIVER.stop_client()
