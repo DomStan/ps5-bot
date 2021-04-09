@@ -299,7 +299,7 @@ def extract_text(element):
         return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
-    result_stock = [""]
+    result_stock = []
     try:
         result_stock = WebDriverWait(driver, timeout=5).until(lambda d: d.find_element_by_xpath(stock_xpath))
         result_stock = [result_stock]
@@ -312,6 +312,8 @@ def stock_price_from_xpath(driver, stock_xpath, price_xpath):
 
 
 def detect_amazon(stock, price, page_name, page_edition, page_url):
+    if len(stock) == 0:
+        return
     text = stock[0].text.strip()
     print(text)
     logging.info(text)
