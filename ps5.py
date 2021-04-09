@@ -390,7 +390,7 @@ while True:
     for page in pages:
         try:
             signal.signal(signal.SIGALRM, handler)
-            signal.alarm(3)
+            signal.alarm(10)
             DRIVER.get(page.url)
         except InvalidSessionIdException:
             print("Restarting program...")
