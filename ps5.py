@@ -420,7 +420,7 @@ while True:
             DRIVER.quit()
             vdisplay.stop()
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
-        except:
+        except Exception:
             exc, _, _ = sys.exc_info()
             msg = "Refreshing page: " + str(exc)
             print(msg)
