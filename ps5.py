@@ -427,7 +427,6 @@ def loop(driver):
                 logging.warning(msg)
                 driver.refresh()
 
-            time.sleep()
 
             # time.sleep(randinrange([0, 1]))
             # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
