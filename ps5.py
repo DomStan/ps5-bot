@@ -17,6 +17,7 @@ import requests
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import InvalidSessionIdException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -393,6 +394,11 @@ while True:
             p_driver.start()
             p_driver.join(timeout=10)
             # DRIVER.get(page.url)
+        except TimeoutException:
+            msg = "Selenium timeout"
+            print(msg)
+            logging.warning(msg)
+            continue
         except TimeoutError:
             msg = "Thread timeout"
             print(msg)
