@@ -21,6 +21,11 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 
+from xvfbwrapper import Xvfb
+
+vdisplay = Xvfb()
+vdisplay.start()
+
 options = Options()
 options.add_argument("--headless")
 options.page_load_strategy = 'eager'
@@ -91,6 +96,7 @@ def exit_handler():
     logging.info(exit_message)
     notify(exit_message, 'Bye!')
     DRIVER.quit()
+    vdisplay.stop()
     sys.exit()
 
 atexit.register(exit_handler)
