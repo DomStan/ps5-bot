@@ -476,4 +476,4 @@ while True:
     msg = "Loop pass completed (" + str(round(end-start)) + "s)"
     print(msg)
     logging.info(msg)
-    driver.delete_all_cookies()
+    DRIVER.delete_all_cookies()
