@@ -384,7 +384,7 @@ def ps5_detected(page, reason, price):
     sys.stderr.write(print_text)
 
     if can_send_notification:
-        notify(title, message, url)
+        notify(title, message, page.url)
 
 def extract_text(element):
     text = ''.join(map(lambda x: x.text, element)).strip()
