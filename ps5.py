@@ -188,12 +188,12 @@ PAGE_TOPO,
 "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
 
 # test
-pages.append(Page(
-"Digital",
-PAGE_TOPO,
-"https://www.topocentras.lt/zaidimu-pultas-sony-dualsense-ps5.html",
-"//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
-"//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
+# pages.append(Page(
+# "Digital",
+# PAGE_TOPO,
+# "https://www.topocentras.lt/zaidimu-pultas-sony-dualsense-ps5.html",
+# "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
+# "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
 
 # pages.append(Page(
 # "Standard",
@@ -295,14 +295,14 @@ PAGE_AMAZONIT,
 "//*[@id='a-autoid-14-announce']"))
 
 #test
-pages.append(AmazonPage(
-"Digital",
-PAGE_AMAZONIT,
-"https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
-"//*[@id='availability']/span",
-"//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-13-announce']",
-"//*[@id='a-autoid-14-announce']"))
+# pages.append(AmazonPage(
+# "Digital",
+# PAGE_AMAZONIT,
+# "https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
+# "//*[@id='availability']/span",
+# "//*[@id='priceblock_ourprice']",
+# "//*[@id='a-autoid-13-announce']",
+# "//*[@id='a-autoid-14-announce']"))
 #
 # pages.append(AmazonPage(
 # "Standard",
