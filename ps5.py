@@ -466,5 +466,6 @@ def loop(driver):
         msg = "Loop pass completed (" + str(round(end-start)) + "s)"
         print(msg)
         logging.info(msg)
+        os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
 
 loop(DRIVER)
