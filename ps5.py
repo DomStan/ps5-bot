@@ -474,22 +474,22 @@ while True:
         try:
             DRIVER.get(page.url)
         except TimeoutException:
-            msg = "WARNING: Selenium timeout. Skipping page.\n"
+            msg = "Selenium timeout. Skipping page.\n"
             sys.stderr.write(msg)
             logging.warning(msg)
             continue
         except InvalidSessionIdException:
-            msg = "ERROR: InvalidSessionIdException. Restarting program."
+            msg = "InvalidSessionIdException. Restarting program."
             sys.stderr.write(msg)
-            logging.warning(msg)
+            logging.error(msg)
             DRIVER.quit()
             VDISPLAY.stop()
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         except Exception:
             exc, _, _ = sys.exc_info()
-            msg = "ERROR: Skipping page. " + str(exc)
+            msg = "Skipping page. " + str(exc)
             sys.stderr.write(msg)
-            logging.warning(msg)
+            logging.error(msg)
             continue
 
         # Amazon pages that need clicking to access PS5 page
@@ -526,7 +526,7 @@ while True:
             #     ps5_detected('empty result', page.name, price, page.edition, page.url)
             stock, price = stock_price_from_xpath(DRIVER, page)
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
-                ps5_detected('empty result', page.name, price, page.edition, page.url)
+                ps5_detected(page, 'empty result', price)
 
     end = time.time()
     msg = "Loop pass completed (" + str(round(end-start)) + "s)"
