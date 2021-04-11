@@ -391,13 +391,13 @@ while True:
         try:
             p_driver = Process(target=DRIVER.get, args=(page.url,))
             p_driver.start()
-            p_driver.join(timeout=5)
+            p_driver.join(timeout=8)
             # DRIVER.get(page.url)
         except InvalidSessionIdException:
             print("Restarting program...")
             logging.warning("Restarting program...")
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
-        except Exception:
+        except:
             exc, _, _ = sys.exc_info()
             msg = "Refreshing page: " + str(exc)
             print(msg)
