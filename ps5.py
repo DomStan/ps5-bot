@@ -21,56 +21,56 @@ from selenium.webdriver.support.ui import WebDriverWait
 from xvfbwrapper import Xvfb
 
 # Start virtual display
-vdisplay = Xvfb()
-vdisplay.start()
+VDISPLAY = Xvfb()
+VDISPLAY.start()
 
 # Run firefox in headless mode
-options = Options()
-options.add_argument("--headless")
+OPTIONS = Options()
+OPTIONS.add_argument("--headless")
 # Do not wait for page to fully load
-options.page_load_strategy = 'none'
+OPTIONS.page_load_strategy = 'none'
 
 # Makes pages load faster
-profile = webdriver.FirefoxProfile()
-profile.set_preference("browser.privatebrowsing.autostart", True)
-profile.set_preference("network.http.pipelining", True)
-profile.set_preference("network.http.proxy.pipelining", True)
-profile.set_preference("network.http.pipelining.maxrequests", 8)
-profile.set_preference("content.notify.interval", 500000)
-profile.set_preference("content.notify.ontimer", True)
-profile.set_preference("content.switch.threshold", 250000)
-profile.set_preference("browser.cache.memory.capacity", 65536) # Increase the cache capacity.
-profile.set_preference("browser.startup.homepage", "about:blank")
-profile.set_preference("reader.parse-on-load.enabled", False) # Disable reader, we won't need that.
-profile.set_preference("browser.pocket.enabled", False) # Duck pocket too!
-profile.set_preference("loop.enabled", False)
-profile.set_preference("browser.chrome.toolbar_style", 1) # Text on Toolbar instead of icons
-profile.set_preference("browser.display.show_image_placeholders", False) # Don't show thumbnails on not loaded images.
-profile.set_preference("browser.display.use_document_colors", False) # Don't show document colors.
-profile.set_preference("browser.display.use_document_fonts", 0) # Don't load document fonts.
-profile.set_preference("browser.formfill.enable", False) # Autofill on forms disabled.
-profile.set_preference("browser.helperApps.deleteTempFileOnExit", True) # Delete temprorary files.
-profile.set_preference("browser.shell.checkDefaultBrowser", False)
-profile.set_preference("browser.startup.homepage", "about:blank")
-profile.set_preference("browser.startup.page", 0) # blank
-profile.set_preference("browser.tabs.forceHide", True) # Disable tabs, We won't need that.
-profile.set_preference("browser.urlbar.autoFill", False) # Disable autofill on URL bar.
-profile.set_preference("browser.urlbar.autocomplete.enabled", False) # Disable autocomplete on URL bar.
-profile.set_preference("browser.urlbar.showPopup", False) # Disable list of URLs when typing on URL bar.
-profile.set_preference("browser.urlbar.showSearch", False) # Disable search bar.
-profile.set_preference("extensions.checkCompatibility", False) # Addon update disabled
-profile.set_preference("extensions.checkUpdateSecurity", False)
-profile.set_preference("extensions.update.autoUpdateEnabled", False)
-profile.set_preference("extensions.update.enabled", False)
-profile.set_preference("general.startup.browser", False)
-profile.set_preference("plugin.default_plugin_disabled", False)
-profile.set_preference("permissions.default.image", 2) # Image load disabled again
-profile.set_preference("http.response.timeout", 5)
-profile.set_preference("dom.max_script_run_time", 5)
-profile.set_preference("webgl.disabled", True)
+PROFILE = webdriver.FirefoxProfile()
+PROFILE.set_preference("browser.privatebrowsing.autostart", True)
+PROFILE.set_preference("network.http.pipelining", True)
+PROFILE.set_preference("network.http.proxy.pipelining", True)
+PROFILE.set_preference("network.http.pipelining.maxrequests", 8)
+PROFILE.set_preference("content.notify.interval", 500000)
+PROFILE.set_preference("content.notify.ontimer", True)
+PROFILE.set_preference("content.switch.threshold", 250000)
+PROFILE.set_preference("browser.cache.memory.capacity", 65536) # Increase the cache capacity.
+PROFILE.set_preference("browser.startup.homepage", "about:blank")
+PROFILE.set_preference("reader.parse-on-load.enabled", False) # Disable reader, we won't need that.
+PROFILE.set_preference("browser.pocket.enabled", False) # Duck pocket too!
+PROFILE.set_preference("loop.enabled", False)
+PROFILE.set_preference("browser.chrome.toolbar_style", 1) # Text on Toolbar instead of icons
+PROFILE.set_preference("browser.display.show_image_placeholders", False) # Don't show thumbnails on not loaded images.
+PROFILE.set_preference("browser.display.use_document_colors", False) # Don't show document colors.
+PROFILE.set_preference("browser.display.use_document_fonts", 0) # Don't load document fonts.
+PROFILE.set_preference("browser.formfill.enable", False) # Autofill on forms disabled.
+PROFILE.set_preference("browser.helperApps.deleteTempFileOnExit", True) # Delete temprorary files.
+PROFILE.set_preference("browser.shell.checkDefaultBrowser", False)
+PROFILE.set_preference("browser.startup.homepage", "about:blank")
+PROFILE.set_preference("browser.startup.page", 0) # blank
+PROFILE.set_preference("browser.tabs.forceHide", True) # Disable tabs, We won't need that.
+PROFILE.set_preference("browser.urlbar.autoFill", False) # Disable autofill on URL bar.
+PROFILE.set_preference("browser.urlbar.autocomplete.enabled", False) # Disable autocomplete on URL bar.
+PROFILE.set_preference("browser.urlbar.showPopup", False) # Disable list of URLs when typing on URL bar.
+PROFILE.set_preference("browser.urlbar.showSearch", False) # Disable search bar.
+PROFILE.set_preference("extensions.checkCompatibility", False) # Addon update disabled
+PROFILE.set_preference("extensions.checkUpdateSecurity", False)
+PROFILE.set_preference("extensions.update.autoUpdateEnabled", False)
+PROFILE.set_preference("extensions.update.enabled", False)
+PROFILE.set_preference("general.startup.browser", False)
+PROFILE.set_preference("plugin.default_plugin_disabled", False)
+PROFILE.set_preference("permissions.default.image", 2) # Image load disabled again
+PROFILE.set_preference("http.response.timeout", 5)
+PROFILE.set_preference("dom.max_script_run_time", 5)
+PROFILE.set_preference("webgl.disabled", True)
 
 global DRIVER
-DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
+DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
 DRIVER.set_page_load_timeout(4)
 
 # Logging setup
@@ -96,10 +96,42 @@ def exit_handler():
     logging.info(exit_message)
     notify(exit_message, 'Bye!')
     DRIVER.quit()
-    vdisplay.stop()
+    VDISPLAY.stop()
     sys.exit()
 
 atexit.register(exit_handler)
+
+# Status of recent notifications
+class NotificationStatus:
+    def __init__(self):
+        self.last_notification_sent = 0.0
+        self.recent_notifications = 0
+
+    def notification_sent(self):
+        self.last_notification_sent = time.time()
+        self.recent_notifications += 1
+
+    def is_limited(self, interval, limit):
+        now = time.time()
+        if (now - self.last_notification_sent) >= interval:
+            self.recent_notifications = 0
+
+        if self.recent_notifications >= limit:
+            return True
+        else:
+            return False
+
+# Used to track and limit the number of notifications sent for each page
+class NotificationLimiter:
+    def __init__(self, pages, interval, limit):
+        self.notification_interval = interval
+        self.notification_limit = limit
+        self.page_notifications = {}
+        for page in pages:
+            self.page_notifications[page.ID] = NotificationStatus()
+
+    def get_notification_status(self, ID):
+        return self.page_notifications[ID]
 
 # Simple page
 class Page:
@@ -108,6 +140,8 @@ class Page:
         self.edition = edition
         # Page name
         self.name = name
+        # Unique ID
+        self.ID = " ".join([name, edition])
         # Page url
         self.url = url
         # Xpath to element that describes stock
@@ -313,54 +347,80 @@ PAGE_AMAZONES,
 # "//*[@id='a-autoid-13-announce']",
 # "//*[@id='a-autoid-14-announce']"))
 
+NOTIFICATION_LIMITER = NotificationLimiter(pages, 60, 5)
+
 def randinrange(range):
     return range[0] + (range[1]-range[0])*random.random()
 
-def yra_ps5(reason, page, price, edition, url):
-    title = " ".join([page, edition])
+def ps5_detected(page, reason, price):
+    notification_status = None
+    can_send_notification = False
+    limit_reached = False
+    try:
+        notification_status = NOTIFICATION_LIMITER.get_notification_status(page.ID)
+    except KeyError:
+        logging.error("Notification limit could not be found for page: " + page.ID)
+
+    if notification_status is not None:
+        notification_interval = notification_status.notification_interval
+        notification_limit = notification_status.notification_limit
+        if not notification_status.is_limited(notification_interval, notification_limit):
+            can_send_notification = True
+            notification_status.notification_sent()
+            if notification_status.is_limited(notification_interval, notification_limit):
+                limit_reached = True
+
+    title = page.ID
     message = " ".join([price, reason])
+
+    if limit_reached:
+        message = "Limit reached! " + message
+    if not can_send_notification:
+        message = "Limited! " + message
+        logging.warning("Notification limit reached.\n")
 
     print_text = "\n".join(['\n', title, message, '\n'])
     logging.info(print_text)
     sys.stderr.write(print_text)
 
-    notify(title, message, url)
+    if can_send_notification:
+        notify(title, message, url)
 
 def extract_text(element):
     text = ''.join(map(lambda x: x.text, element)).strip()
     return text
 
-def stock_price_from_xpath(driver, stock_xpath, price_xpath):
+def stock_price_from_xpath(driver, page):
     # Wait until the stock element has loaded, then extract it
     try:
-        el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(stock_xpath))
+        el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(page.stock_xpath))
     except Exception:
         pass
-    extracted_stock = extract_text(driver.find_elements_by_xpath(stock_xpath))
-    extracted_price = extract_text(driver.find_elements_by_xpath(price_xpath))
+    extracted_stock = extract_text(driver.find_elements_by_xpath(page.stock_xpath))
+    extracted_price = extract_text(driver.find_elements_by_xpath(page.price_xpath))
     return (extracted_stock, extracted_price)
 
 
-def detect_amazon(stock, price, page_name, page_edition, page_url):
+def detect_amazon(page, stock, price):
     if stock == '':
         return
-    if page_name == PAGE_AMAZONPL:
+    if page.name == PAGE_AMAZONPL:
         if 'Obecnie niedostępny' not in stock:
-            yra_ps5(stock, page_name, price, page_edition, page_url)
-    elif page_name == PAGE_AMAZONIT:
+            ps5_detected(page, stock, price)
+    elif page.name == PAGE_AMAZONIT:
         if 'Non disponibile' not in stock:
-            yra_ps5(stock, page_name, price, page_edition, page_url)
-    elif page_name == PAGE_AMAZONES:
+            ps5_detected(page, stock, price)
+    elif page.name == PAGE_AMAZONES:
         if 'No disponible' not in stock:
-            yra_ps5(stock, page_name, price, page_edition, page_url)
-    elif page_name == PAGE_AMAZONFR:
+            ps5_detected(page, stock, price)
+    elif page.name == PAGE_AMAZONFR:
         if 'indisponible' not in stock and 'de ces vendeurs' not in stock:
-            yra_ps5(stock, page_name, price, page_edition, page_url)
-    elif page_name == PAGE_AMAZONDE:
+            ps5_detected(page, stock, price)
+    elif page.name == PAGE_AMAZONDE:
         if 'nicht verfügbar' not in stock:
-            yra_ps5(stock, page_name, price, page_edition, page_url)
+            ps5_detected(page, stock, price)
     elif 'unavailable' not in stock:
-        yra_ps5(stock, page_name, price, page_edition, page_url)
+        ps5_detected(page, stock, price)
 
 # def tryclickncheck(driver, button_xpath, stock_xpath, price_xpath, page_name):
 #     def tryclick(driver, button_xpath):
@@ -423,7 +483,7 @@ while True:
             sys.stderr.write(msg)
             logging.warning(msg)
             DRIVER.quit()
-            vdisplay.stop()
+            VDISPLAY.stop()
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         except Exception:
             exc, _, _ = sys.exc_info()
@@ -447,26 +507,26 @@ while True:
             #     tryclickncheck(driver, page.ded_button_xpath, page.stock_xpath, page.price_xpath, page.name)
 
         if isinstance(page, AmazonPage):
-            stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
-            detect_amazon(stock, price, page.name, page.edition, page.url)
+            stock, price = stock_price_from_xpath(DRIVER, page)
+            detect_amazon(page, stock, price)
 
         elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
             # Temporary solution when there are no PS5 pages in PAGE_TOPO
             # try:
             #     msg = driver.find_element_by_xpath(page.stock_xpath).text
             #     if 'parduota' not in msg:
-            #         yra_ps5('empty result', page.name, price, page.edition, page.url)
+            #         ps5_detected('empty result', page.name, price, page.edition, page.url)
             # except:
-            #     yra_ps5('empty result', page.name, "", page.edition, page.url)
+            #     ps5_detected('empty result', page.name, "", page.edition, page.url)
             # try:
             #     msg = driver.find_element_by_xpath(page.price_xpath).text
             #     if '17' not in msg:
-            #         yra_ps5('empty result', page.name, "", page.edition, page.url)
+            #         ps5_detected('empty result', page.name, "", page.edition, page.url)
             # except:
-            #     yra_ps5('empty result', page.name, price, page.edition, page.url)
-            stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
+            #     ps5_detected('empty result', page.name, price, page.edition, page.url)
+            stock, price = stock_price_from_xpath(DRIVER, page)
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
-                yra_ps5('empty result', page.name, price, page.edition, page.url)
+                ps5_detected('empty result', page.name, price, page.edition, page.url)
 
     end = time.time()
     msg = "Loop pass completed (" + str(round(end-start)) + "s)"
