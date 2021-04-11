@@ -3,7 +3,6 @@
 
 import time
 from selenium import webdriver
-from playsound import playsound
 import random
 from datetime import date
 import logging
