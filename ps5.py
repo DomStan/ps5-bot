@@ -22,13 +22,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from xvfbwrapper import Xvfb
 
+# Start virtual display
 vdisplay = Xvfb()
 vdisplay.start()
 
+# Run firefox in headless mode
 options = Options()
 options.add_argument("--headless")
+# Do not wait for page to fully load
 options.page_load_strategy = 'none'
 
+# Makes pages load faster
 profile = webdriver.FirefoxProfile()
 profile.set_preference("browser.privatebrowsing.autostart", True)
 profile.set_preference("network.http.pipelining", True)
@@ -71,10 +75,10 @@ global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
 DRIVER.set_page_load_timeout(5)
 
-# logging setup
+# Logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
-#
 
+# Send notification to device(s)
 def notify(title, message, url=None):
     token = 'a6j96sdv4z8j3jifiofo2for72fr6b'
     user = 'ucseovragtfce3ibsnocdxx64x3bx4'
@@ -88,7 +92,7 @@ def notify(title, message, url=None):
     else:
         logging.error('Notification post failed with status: ' + r.status_code + ' ' + r.reason)
 
-# exit handler setup
+# exit handler with cleanup
 def exit_handler():
     exit_message = "Application exiting..."
     logging.info(exit_message)
@@ -98,25 +102,33 @@ def exit_handler():
     sys.exit()
 
 atexit.register(exit_handler)
-#
 
-
-
+# Simple page
 class Page:
     def __init__(self, edition, name, url, stock_xpath, price_xpath, cart_xpath=None):
+        # Console edition
         self.edition = edition
+        # Page name
         self.name = name
+        # Page url
         self.url = url
+        # Xpath to element that describes stock
         self.stock_xpath = stock_xpath
+        # Xpath to element that describes price
         self.price_xpath = price_xpath
+        # Xpath to "add to cart" button
         self.cart_xpath = cart_xpath
 
+# Amazon page
 class AmazonPage(Page):
     def __init__(self, edition, name, url, stock_xpath, price_xpath, sed_button_xpath, ded_button_xpath, cart_xpath=None):
         super().__init__(edition, name, url, stock_xpath, price_xpath, cart_xpath=cart_xpath)
+        # Button to select standard ps5 edition
         self.sed_button_xpath = sed_button_xpath
+        # Button to select digital ps5 edition
         self.ded_button_xpath = ded_button_xpath
 
+# Page names
 PAGE_AMAZONNL = 'Amazon.nl'
 PAGE_AMAZONDE = 'Amazon.de'
 PAGE_AMAZONIT = 'Amazon.it'
@@ -128,7 +140,8 @@ PAGE_TOPO = 'Topocentras.lt'
 PAGE_TECHNO = 'Technorama.lt'
 PAGE_GAMEROOM = 'Gameroom.lt'
 
-TIME_SLEEP_BETWEEN_PAGES = 3
+# Sleep times, if needed
+TIME_SLEEP_BETWEEN_PAGES = 0
 TIME_SLEEP_BETWEEN_PAGES_AMAZON = 0
 TIME_SLEEP_BETWEEN_LOOPS = 0
 TIME_SLEEP_AFTER_CLICK_RANGE = (0.5, 0.5)
@@ -181,7 +194,6 @@ PAGE_TOPO,
 # "//*[@id='our_price_display']",
 # cart_xpath="//*[@id='add_to_cart']"))
 
-
 # pages.append(Page(
 # 'Digital',
 # PAGE_GAMEROOM,
@@ -189,6 +201,7 @@ PAGE_TOPO,
 # "//*[@id='availability_value']",
 # "//*[@id='our_price_display']",
 # cart_xpath="//*[@id='add_to_cart']"))
+
 # pages.append(Page(
 # PAGE_TECHNO,
 # "https://www.technorama.lt/playstation-5/24600-konsole-sony-playstation-5-standart-edition-white.html",
@@ -316,23 +329,17 @@ def yra_ps5(reason, page, price, edition, url):
     notify(title, message, url)
 
 def extract_text(element):
-    # empty = 'empty'
     text = ''.join(map(lambda x: x.text, element)).strip()
     return text
-    # if text == '':
-    #     return empty
-    # else:
-    #     return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
+    # Wait until the stock element has loaded, then extract it
     try:
         el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(stock_xpath))
     except Exception:
         pass
-    result_stock = driver.find_elements_by_xpath(stock_xpath)
-    result_price = driver.find_elements_by_xpath(price_xpath)
-    extracted_stock = extract_text(result_stock)
-    extracted_price = extract_text(result_price)
+    extracted_stock = extract_text(driver.find_elements_by_xpath(stock_xpath))
+    extracted_price = extract_text(driver.find_elements_by_xpath(price_xpath))
     return (extracted_stock, extracted_price)
 
 
@@ -410,7 +417,7 @@ while True:
         try:
             DRIVER.get(page.url)
         except TimeoutException:
-            msg = "Selenium timeout"
+            msg = "Selenium timeout. Skipping page.\n"
             print(msg)
             logging.warning(msg)
             continue
@@ -422,12 +429,12 @@ while True:
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         except Exception:
             exc, _, _ = sys.exc_info()
-            msg = "Refreshing page: " + str(exc)
+            msg = "Skipping page: " + str(exc)
             print(msg)
             logging.warning(msg)
             continue
 
-
+        # Amazon pages that need clicking to access PS5 page
         # time.sleep(randinrange([0, 1]))
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
@@ -447,6 +454,7 @@ while True:
             detect_amazon(stock, price, page.name, page.edition, page.url)
 
         elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
+            # Temporary solution when there are no PS5 pages in PAGE_TOPO
             # try:
             #     msg = driver.find_element_by_xpath(page.stock_xpath).text
             #     if 'parduota' not in msg:
