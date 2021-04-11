@@ -73,7 +73,7 @@ profile.set_preference("webgl.disabled", True)
 
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
-DRIVER.set_page_load_timeout(5)
+DRIVER.set_page_load_timeout(3)
 
 # Logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -417,7 +417,7 @@ while True:
         try:
             DRIVER.get(page.url)
         except TimeoutException:
-            msg = "Selenium timeout. Skipping page.\n"
+            msg = "\nSelenium timeout. Skipping page.\n"
             print(msg)
             logging.warning(msg)
             continue
@@ -476,3 +476,4 @@ while True:
     msg = "Loop pass completed (" + str(round(end-start)) + "s)"
     print(msg)
     logging.info(msg)
+    driver.delete_all_cookies()
