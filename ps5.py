@@ -308,7 +308,7 @@ def extract_text(element):
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
     result_stock = []
     try:
-        result_stock = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(stock_xpath))
+        result_stock = WebDriverWait(driver, timeout=5).until(lambda d: d.find_element_by_xpath(stock_xpath))
         result_stock = [result_stock]
     except Exception:
         pass
@@ -404,12 +404,14 @@ def loop(driver):
                 msg = "Selenium timeout"
                 print(msg)
                 logging.warning(msg)
-                continue
+                driver.refresh()
+                # continue
             except TimeoutError:
                 msg = "Thread timeout"
                 print(msg)
                 logging.warning(msg)
-                continue
+                driver.refresh()
+                # continue
             except InvalidSessionIdException:
                 print("Restarting program...")
                 logging.warning("Restarting program...")
@@ -419,8 +421,9 @@ def loop(driver):
                 msg = "Refreshing page: " + str(exc)
                 print(msg)
                 logging.warning(msg)
+                driver.refresh()
                 # DRIVER.refresh()
-                continue
+                # continue
 
             # time.sleep(randinrange([0, 1]))
             # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
