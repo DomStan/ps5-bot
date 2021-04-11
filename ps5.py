@@ -142,6 +142,15 @@ PAGE_TOPO,
 "https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5-digital.html",
 "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
 "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
+
+# test
+pages.append(Page(
+"Digital",
+PAGE_TOPO,
+"https://www.topocentras.lt/zaidimu-pultas-sony-dualsense-ps5.html",
+"//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
+"//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
+
 # pages.append(Page(
 # "Standard",
 # PAGE_TOPO,
@@ -236,6 +245,16 @@ pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONIT,
 "https://www.amazon.it/_itm/dp/B08KJF2D25",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']",
+"//*[@id='a-autoid-13-announce']",
+"//*[@id='a-autoid-14-announce']"))
+
+#test
+pages.append(AmazonPage(
+"Digital",
+PAGE_AMAZONIT,
+"https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
 "//*[@id='availability']/span",
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-13-announce']",
@@ -396,25 +415,17 @@ def loop(driver):
         start = time.time()
         for page in pages:
             try:
-                # p_driver = Process(target=driver.get, args=(page.url,))
-                # p_driver.start()
-                # p_driver.join(timeout=10)
                 driver.get(page.url)
             except TimeoutException:
                 msg = "Selenium timeout"
                 print(msg)
                 logging.warning(msg)
                 driver.refresh()
-                # continue
-            except TimeoutError:
-                msg = "Thread timeout"
-                print(msg)
-                logging.warning(msg)
-                driver.refresh()
-                # continue
             except InvalidSessionIdException:
                 print("Restarting program...")
                 logging.warning("Restarting program...")
+                DRIVER.quit()
+                vdisplay.stop()
                 os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
             except:
                 exc, _, _ = sys.exc_info()
@@ -422,8 +433,6 @@ def loop(driver):
                 print(msg)
                 logging.warning(msg)
                 driver.refresh()
-                # DRIVER.refresh()
-                # continue
 
             # time.sleep(randinrange([0, 1]))
             # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
