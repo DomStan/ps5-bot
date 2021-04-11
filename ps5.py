@@ -27,7 +27,7 @@ vdisplay.start()
 
 options = Options()
 options.add_argument("--headless")
-options.page_load_strategy = 'none'
+options.page_load_strategy = 'normal'
 
 profile = webdriver.FirefoxProfile()
 profile.set_preference("browser.privatebrowsing.autostart", True)
@@ -70,7 +70,6 @@ profile.set_preference("webgl.disabled", True)
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=profile, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=options)
 DRIVER.set_page_load_timeout(5)
-# DRIVER.implicitly_wait(1)
 
 # logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -325,23 +324,19 @@ def extract_text(element):
         return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
-    result_stock = []
-    try:
-        result_stock = WebDriverWait(driver, timeout=3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
-    except Exception:
-        pass
-    # result_stock = driver.find_elements_by_xpath(stock_xpath)
+    # result_stock = []
+    # try:
+    #     result_stock = WebDriverWait(driver, timeout=3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
+    # except Exception:
+    #     pass
+    result_stock = driver.find_elements_by_xpath(stock_xpath)
     result_price = driver.find_elements_by_xpath(price_xpath)
     extracted_price = extract_text(result_price)
     return (result_stock, extracted_price)
 
 
 def detect_amazon(stock, price, page_name, page_edition, page_url):
-    if len(stock) == 0:
-        return
     text = stock[0].text.strip()
-    print(text)
-    logging.info(text)
     if text == "":
         return
     if page_name == PAGE_AMAZONPL:
@@ -467,7 +462,7 @@ def loop(driver):
                 msg = extract_text(stock)
                 print(msg)
                 logging.info(msg)
-                if len(stock)==0 and check_addtocart(driver, page.cart_xpath):
+                if len(stock) == 0 and check_addtocart(driver, page.cart_xpath):
                     yra_ps5('empty result', page.name, price, page.edition, page.url)
 
         end = time.time()
