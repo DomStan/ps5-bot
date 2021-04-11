@@ -135,12 +135,12 @@ TIME_SLEEP_AFTER_CLICK_RANGE = (0.5, 0.5)
 
 pages = []
 
-pages.append(Page(
-"Digital",
-PAGE_TOPO,
-"https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5-digital.html",
-"//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
-"//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
+# pages.append(Page(
+# "Digital",
+# PAGE_TOPO,
+# "https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5-digital.html",
+# "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
+# "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
 
 # test
 pages.append(Page(
@@ -325,7 +325,7 @@ def extract_text(element):
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
     try:
-        el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
+        el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(stock_xpath))
     except Exception:
         pass
     result_stock = driver.find_elements_by_xpath(stock_xpath)
