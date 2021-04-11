@@ -11,6 +11,7 @@ import sys
 import os
 import atexit
 import signal
+from multiprocessing import Process, current_process
 
 import requests
 
@@ -21,7 +22,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 options = Options()
 options.add_argument("--headless")
-options.page_load_strategy = 'none'
+options.page_load_strategy = 'eager'
 
 profile = webdriver.FirefoxProfile()
 profile.set_preference("browser.privatebrowsing.autostart", True)
@@ -382,19 +383,16 @@ def check_addtocart(driver, cart_xpath):
     else:
         return True
 
-def handler(signum, frame):
-    logging.warning("Function call timed out.")
-    raise Exception("Function call timed out.")
-
 logging.info("Starting loop...")
 print("Starting loop...")
 while True:
     start = time.time()
     for page in pages:
         try:
-            signal.signal(signal.SIGALRM, handler)
-            signal.alarm(5)
-            DRIVER.get(page.url)
+            p_driver = Process(target=DRIVER.get, args=(page.url,))
+            p_driver.start()
+            p_driver.join(timeout=5)
+            # DRIVER.get(page.url)
         except InvalidSessionIdException:
             print("Restarting program...")
             logging.warning("Restarting program...")
@@ -404,9 +402,9 @@ while True:
             msg = "Refreshing page: " + str(exc)
             print(msg)
             logging.warning(msg)
-            continue
+            DRIVER.refresh()
+            # continue
 
-        signal.alarm(0)
         # time.sleep(randinrange([0, 1]))
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
