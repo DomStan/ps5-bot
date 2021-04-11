@@ -337,25 +337,25 @@ def stock_price_from_xpath(driver, stock_xpath, price_xpath):
 
 
 def detect_amazon(stock, price, page_name, page_edition, page_url):
-    if text == '':
+    if stock == '':
         return
     if page_name == PAGE_AMAZONPL:
-        if 'Obecnie niedostępny' not in text:
-            yra_ps5(text, page_name, price, page_edition, page_url)
+        if 'Obecnie niedostępny' not in stock:
+            yra_ps5(stock, page_name, price, page_edition, page_url)
     elif page_name == PAGE_AMAZONIT:
-        if 'Non disponibile' not in text:
-            yra_ps5(text, page_name, price, page_edition, page_url)
+        if 'Non disponibile' not in stock:
+            yra_ps5(stock, page_name, price, page_edition, page_url)
     elif page_name == PAGE_AMAZONES:
-        if 'No disponible' not in text:
-            yra_ps5(text, page_name, price, page_edition, page_url)
+        if 'No disponible' not in stock:
+            yra_ps5(stock, page_name, price, page_edition, page_url)
     elif page_name == PAGE_AMAZONFR:
-        if 'indisponible' not in text and 'de ces vendeurs' not in text:
-            yra_ps5(text, page_name, price, page_edition, page_url)
+        if 'indisponible' not in stock and 'de ces vendeurs' not in stock:
+            yra_ps5(stock, page_name, price, page_edition, page_url)
     elif page_name == PAGE_AMAZONDE:
-        if 'nicht verfügbar' not in text:
-            yra_ps5(text, page_name, price, page_edition, page_url)
-    elif 'unavailable' not in text:
-        yra_ps5(text, page_name, price, page_edition, page_url)
+        if 'nicht verfügbar' not in stock:
+            yra_ps5(stock, page_name, price, page_edition, page_url)
+    elif 'unavailable' not in stock:
+        yra_ps5(stock, page_name, price, page_edition, page_url)
 
 # def tryclickncheck(driver, button_xpath, stock_xpath, price_xpath, page_name):
 #     def tryclick(driver, button_xpath):
