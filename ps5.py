@@ -362,8 +362,8 @@ def ps5_detected(page, reason, price):
         logging.error("Notification limit could not be found for page: " + page.ID)
 
     if notification_status is not None:
-        notification_interval = notification_status.notification_interval
-        notification_limit = notification_status.notification_limit
+        notification_interval = NOTIFICATION_LIMITER.notification_interval
+        notification_limit = NOTIFICATION_LIMITER.notification_limit
         if not notification_status.is_limited(notification_interval, notification_limit):
             can_send_notification = True
             notification_status.notification_sent()
