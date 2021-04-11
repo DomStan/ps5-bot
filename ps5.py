@@ -413,7 +413,7 @@ while True:
             msg = "Selenium timeout"
             print(msg)
             logging.warning(msg)
-            DRIVER.refresh()
+            continue
         except InvalidSessionIdException:
             print("Restarting program...")
             logging.warning("Restarting program...")
@@ -425,7 +425,7 @@ while True:
             msg = "Refreshing page: " + str(exc)
             print(msg)
             logging.warning(msg)
-            DRIVER.refresh()
+            continue
 
 
         # time.sleep(randinrange([0, 1]))
