@@ -172,12 +172,6 @@ PAGE_TOPO = 'Topocentras.lt'
 PAGE_TECHNO = 'Technorama.lt'
 PAGE_GAMEROOM = 'Gameroom.lt'
 
-# Sleep times, if needed
-TIME_SLEEP_BETWEEN_PAGES = 0
-TIME_SLEEP_BETWEEN_PAGES_AMAZON = 0
-TIME_SLEEP_BETWEEN_LOOPS = 0
-TIME_SLEEP_AFTER_CLICK_RANGE = (0.5, 0.5)
-
 pages = []
 
 pages.append(Page(
@@ -493,10 +487,7 @@ while True:
             continue
 
         # Amazon pages that need clicking to access PS5 page
-        # time.sleep(randinrange([0, 1]))
-        # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
         # if page.name in (PAGE_AMAZONDE):
-        #     time.sleep(TIME_SLEEP_AMAZON)
             # if not tryclickncheck(driver, page.sed_button_xpath, page.stock_xpath, page.price_xpath, page.name):
             #     logging.warning("Retrying Amazon click and check...")
             #     tryclickncheck(driver, page.sed_button_xpath, page.stock_xpath, page.price_xpath, page.name)
