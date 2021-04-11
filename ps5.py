@@ -9,8 +9,6 @@ import logging
 import sys
 import os
 import atexit
-import signal
-from multiprocessing import Process, current_process
 
 import requests
 
@@ -92,7 +90,7 @@ def notify(title, message, url=None):
     else:
         logging.error('Notification post failed with status: ' + r.status_code + ' ' + r.reason)
 
-# exit handler with cleanup
+# Exit handler with cleanup
 def exit_handler():
     exit_message = "Application exiting..."
     logging.info(exit_message)
@@ -324,7 +322,7 @@ def yra_ps5(reason, page, price, edition, url):
 
     print_text = "\n".join(['\n', title, message, '\n'])
     logging.info(print_text)
-    print(print_text)
+    sys.stderr.write(print_text)
 
     notify(title, message, url)
 
@@ -410,27 +408,27 @@ def check_addtocart(driver, cart_xpath):
         return True
 
 logging.info("Starting loop...")
-print("Starting loop...")
 while True:
     start = time.time()
     for page in pages:
         try:
             DRIVER.get(page.url)
         except TimeoutException:
-            msg = "\nSelenium timeout. Skipping page.\n"
-            print(msg)
+            msg = "WARNING: Selenium timeout. Skipping page.\n"
+            sys.stderr.write(msg)
             logging.warning(msg)
             continue
         except InvalidSessionIdException:
-            print("Restarting program...")
-            logging.warning("Restarting program...")
+            msg = "ERROR: InvalidSessionIdException. Restarting program."
+            sys.stderr.write(msg)
+            logging.warning(msg)
             DRIVER.quit()
             vdisplay.stop()
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         except Exception:
             exc, _, _ = sys.exc_info()
-            msg = "Skipping page: " + str(exc)
-            print(msg)
+            msg = "ERROR: Skipping page. " + str(exc)
+            sys.stderr.write(msg)
             logging.warning(msg)
             continue
 
@@ -450,7 +448,6 @@ while True:
 
         if isinstance(page, AmazonPage):
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
-            print(stock)
             detect_amazon(stock, price, page.name, page.edition, page.url)
 
         elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
@@ -468,12 +465,10 @@ while True:
             # except:
             #     yra_ps5('empty result', page.name, price, page.edition, page.url)
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
-            print(stock)
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 yra_ps5('empty result', page.name, price, page.edition, page.url)
 
     end = time.time()
     msg = "Loop pass completed (" + str(round(end-start)) + "s)"
-    print(msg)
     logging.info(msg)
     DRIVER.delete_all_cookies()
