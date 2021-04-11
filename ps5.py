@@ -391,8 +391,13 @@ while True:
         try:
             p_driver = Process(target=DRIVER.get, args=(page.url,))
             p_driver.start()
-            p_driver.join(timeout=8)
+            p_driver.join(timeout=10)
             # DRIVER.get(page.url)
+        except TimeoutError:
+            msg = "Thread timeout"
+            print(msg)
+            logging.warning(msg)
+            continue
         except InvalidSessionIdException:
             print("Restarting program...")
             logging.warning("Restarting program...")
@@ -402,8 +407,8 @@ while True:
             msg = "Refreshing page: " + str(exc)
             print(msg)
             logging.warning(msg)
-            DRIVER.refresh()
-            # continue
+            # DRIVER.refresh()
+            continue
 
         # time.sleep(randinrange([0, 1]))
         # time.sleep(TIME_SLEEP_BETWEEN_PAGES)
