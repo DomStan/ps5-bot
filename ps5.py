@@ -27,7 +27,7 @@ vdisplay.start()
 
 options = Options()
 options.add_argument("--headless")
-options.page_load_strategy = 'eager'
+options.page_load_strategy = 'none'
 
 profile = webdriver.FirefoxProfile()
 profile.set_preference("browser.privatebrowsing.autostart", True)
@@ -325,13 +325,13 @@ def extract_text(element):
         return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
-    # result_stock = []
-    # try:
-    #     result_stock = WebDriverWait(driver, timeout=5).until(lambda d: d.find_element_by_xpath(stock_xpath))
-    #     result_stock = [result_stock]
-    # except Exception:
-    #     pass
-    result_stock = driver.find_elements_by_xpath(stock_xpath)
+    result_stock = []
+    try:
+        result_stock = WebDriverWait(driver, timeout=3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
+        result_stock = [result_stock]
+    except Exception:
+        pass
+    # result_stock = driver.find_elements_by_xpath(stock_xpath)
     result_price = driver.find_elements_by_xpath(price_xpath)
     extracted_price = extract_text(result_price)
     return (result_stock, extracted_price)
