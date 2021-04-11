@@ -335,6 +335,8 @@ def stock_price_from_xpath(driver, stock_xpath, price_xpath):
 
 
 def detect_amazon(stock, price, page_name, page_edition, page_url):
+    if len(stock) == 0:
+        return
     text = stock[0].text.strip()
     if text == "":
         return
