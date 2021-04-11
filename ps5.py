@@ -143,12 +143,12 @@ PAGE_TOPO,
 "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
 
 # test
-# pages.append(Page(
-# "Digital",
-# PAGE_TOPO,
-# "https://www.topocentras.lt/zaidimu-pultas-sony-dualsense-ps5.html",
-# "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
-# "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
+pages.append(Page(
+"Digital",
+PAGE_TOPO,
+"https://www.topocentras.lt/zaidimu-pultas-sony-dualsense-ps5.html",
+"//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
+"//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
 
 # pages.append(Page(
 # "Standard",
@@ -250,14 +250,14 @@ PAGE_AMAZONIT,
 "//*[@id='a-autoid-14-announce']"))
 
 #test
-# pages.append(AmazonPage(
-# "Digital",
-# PAGE_AMAZONIT,
-# "https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-13-announce']",
-# "//*[@id='a-autoid-14-announce']"))
+pages.append(AmazonPage(
+"Digital",
+PAGE_AMAZONIT,
+"https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']",
+"//*[@id='a-autoid-13-announce']",
+"//*[@id='a-autoid-14-announce']"))
 #
 # pages.append(AmazonPage(
 # "Standard",
@@ -316,12 +316,13 @@ def yra_ps5(reason, page, price, edition, url):
     notify(title, message, url)
 
 def extract_text(element):
-    empty = 'empty element'
+    # empty = 'empty'
     text = ''.join(map(lambda x: x.text, element)).strip()
-    if text == '':
-        return empty
-    else:
-        return text
+    return text
+    # if text == '':
+    #     return empty
+    # else:
+    #     return text
 
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
     try:
@@ -330,15 +331,13 @@ def stock_price_from_xpath(driver, stock_xpath, price_xpath):
         pass
     result_stock = driver.find_elements_by_xpath(stock_xpath)
     result_price = driver.find_elements_by_xpath(price_xpath)
+    extracted_stock = extract_text(result_stock)
     extracted_price = extract_text(result_price)
-    return (result_stock, extracted_price)
+    return (extracted_stock, extracted_price)
 
 
 def detect_amazon(stock, price, page_name, page_edition, page_url):
-    if len(stock) == 0:
-        return
-    text = stock[0].text.strip()
-    if text == "":
+    if text == '':
         return
     if page_name == PAGE_AMAZONPL:
         if 'Obecnie niedostępny' not in text:
@@ -444,9 +443,7 @@ while True:
 
         if isinstance(page, AmazonPage):
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
-            msg = extract_text(stock)
-            print(msg)
-            logging.info(msg)
+            print(stock)
             detect_amazon(stock, price, page.name, page.edition, page.url)
 
         elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
@@ -463,10 +460,8 @@ while True:
             # except:
             #     yra_ps5('empty result', page.name, price, page.edition, page.url)
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
-            msg = extract_text(stock)
-            print(msg)
-            logging.info(msg)
-            if len(stock) == 0 and check_addtocart(DRIVER, page.cart_xpath):
+            print(stock)
+            if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 yra_ps5('empty result', page.name, price, page.edition, page.url)
 
     end = time.time()
