@@ -27,7 +27,7 @@ vdisplay.start()
 
 options = Options()
 options.add_argument("--headless")
-options.page_load_strategy = 'eager'
+options.page_load_strategy = 'none'
 
 profile = webdriver.FirefoxProfile()
 profile.set_preference("browser.privatebrowsing.autostart", True)
@@ -308,7 +308,7 @@ def extract_text(element):
 def stock_price_from_xpath(driver, stock_xpath, price_xpath):
     result_stock = []
     try:
-        result_stock = WebDriverWait(driver, timeout=5).until(lambda d: d.find_element_by_xpath(stock_xpath))
+        result_stock = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(stock_xpath))
         result_stock = [result_stock]
     except Exception:
         pass
@@ -456,7 +456,7 @@ def loop(driver):
                 msg = extract_text(stock)
                 print(msg)
                 logging.info(msg)
-                if stock[0]=="" and check_addtocart(driver, page.cart_xpath):
+                if len(stock)==0 and check_addtocart(driver, page.cart_xpath):
                     yra_ps5('empty result', page.name, price, page.edition, page.url)
 
         end = time.time()
