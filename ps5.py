@@ -328,7 +328,6 @@ def stock_price_from_xpath(driver, stock_xpath, price_xpath):
     result_stock = []
     try:
         result_stock = WebDriverWait(driver, timeout=3).until(lambda d: d.find_elements_by_xpath(stock_xpath))
-        result_stock = [result_stock]
     except Exception:
         pass
     # result_stock = driver.find_elements_by_xpath(stock_xpath)
