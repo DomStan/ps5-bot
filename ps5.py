@@ -442,6 +442,9 @@ while True:
 
         if isinstance(page, AmazonPage):
             stock, price = stock_price_from_xpath(DRIVER, page.stock_xpath, page.price_xpath)
+            msg = extract_text(stock)
+            print(msg)
+            logging.info(msg)
             detect_amazon(stock, price, page.name, page.edition, page.url)
 
         elif page.name in (PAGE_TOPO, PAGE_TECHNO, PAGE_GAMEROOM):
