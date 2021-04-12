@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import time
-from selenium import webdriver
 import random
 from datetime import date
 import logging
 import sys
 import os
 import atexit
-
 import requests
+import json
 
+from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import InvalidSessionIdException
 from selenium.common.exceptions import TimeoutException
@@ -39,32 +39,32 @@ PROFILE.set_preference("network.http.pipelining.maxrequests", 8)
 PROFILE.set_preference("content.notify.interval", 500000)
 PROFILE.set_preference("content.notify.ontimer", True)
 PROFILE.set_preference("content.switch.threshold", 250000)
-PROFILE.set_preference("browser.cache.memory.capacity", 65536) # Increase the cache capacity.
+PROFILE.set_preference("browser.cache.memory.capacity", 65536)
 PROFILE.set_preference("browser.startup.homepage", "about:blank")
-PROFILE.set_preference("reader.parse-on-load.enabled", False) # Disable reader, we won't need that.
-PROFILE.set_preference("browser.pocket.enabled", False) # Duck pocket too!
+PROFILE.set_preference("reader.parse-on-load.enabled", False)
+PROFILE.set_preference("browser.pocket.enabled", False)
 PROFILE.set_preference("loop.enabled", False)
-PROFILE.set_preference("browser.chrome.toolbar_style", 1) # Text on Toolbar instead of icons
-PROFILE.set_preference("browser.display.show_image_placeholders", False) # Don't show thumbnails on not loaded images.
-PROFILE.set_preference("browser.display.use_document_colors", False) # Don't show document colors.
-PROFILE.set_preference("browser.display.use_document_fonts", 0) # Don't load document fonts.
-PROFILE.set_preference("browser.formfill.enable", False) # Autofill on forms disabled.
-PROFILE.set_preference("browser.helperApps.deleteTempFileOnExit", True) # Delete temprorary files.
+PROFILE.set_preference("browser.chrome.toolbar_style", 1)
+PROFILE.set_preference("browser.display.show_image_placeholders", False)
+PROFILE.set_preference("browser.display.use_document_colors", False)
+PROFILE.set_preference("browser.display.use_document_fonts", 0)
+PROFILE.set_preference("browser.formfill.enable", False)
+PROFILE.set_preference("browser.helperApps.deleteTempFileOnExit", True)
 PROFILE.set_preference("browser.shell.checkDefaultBrowser", False)
 PROFILE.set_preference("browser.startup.homepage", "about:blank")
-PROFILE.set_preference("browser.startup.page", 0) # blank
-PROFILE.set_preference("browser.tabs.forceHide", True) # Disable tabs, We won't need that.
-PROFILE.set_preference("browser.urlbar.autoFill", False) # Disable autofill on URL bar.
-PROFILE.set_preference("browser.urlbar.autocomplete.enabled", False) # Disable autocomplete on URL bar.
-PROFILE.set_preference("browser.urlbar.showPopup", False) # Disable list of URLs when typing on URL bar.
-PROFILE.set_preference("browser.urlbar.showSearch", False) # Disable search bar.
-PROFILE.set_preference("extensions.checkCompatibility", False) # Addon update disabled
+PROFILE.set_preference("browser.startup.page", 0)
+PROFILE.set_preference("browser.tabs.forceHide", True)
+PROFILE.set_preference("browser.urlbar.autoFill", False)
+PROFILE.set_preference("browser.urlbar.autocomplete.enabled", False)
+PROFILE.set_preference("browser.urlbar.showPopup", False)
+PROFILE.set_preference("browser.urlbar.showSearch", False)
+PROFILE.set_preference("extensions.checkCompatibility", False)
 PROFILE.set_preference("extensions.checkUpdateSecurity", False)
 PROFILE.set_preference("extensions.update.autoUpdateEnabled", False)
 PROFILE.set_preference("extensions.update.enabled", False)
 PROFILE.set_preference("general.startup.browser", False)
 PROFILE.set_preference("plugin.default_plugin_disabled", False)
-PROFILE.set_preference("permissions.default.image", 2) # Image load disabled again
+PROFILE.set_preference("permissions.default.image", 2)
 PROFILE.set_preference("http.response.timeout", 5)
 PROFILE.set_preference("dom.max_script_run_time", 5)
 PROFILE.set_preference("webgl.disabled", True)
@@ -101,6 +101,34 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
+# App configuration manager
+class ConfigManager:
+    CONFIG_FNAME = 'config.json'
+    CONFIG_VAL_TESTENABLED = 'Test enabled'
+    CONFIG_VAL_NOTIFICATIONINTERVAL = 'Notification interval'
+    CONFIG_VAL_NOTIFICATIONLIMIT = 'Notification limit'
+    def __init__(self):
+        self.config = {}
+        self.config = json.load(open(CONFIG_FNAME))
+
+    def update_config(self):
+        self.config = json.load(open(CONFIG_FNAME))
+
+    def get_notification_interval(self):
+        return self.config[CONFIG_VAL_NOTIFICATIONINTERVAL]
+
+    def get_notification_limit(self):
+        return self.config[CONFIG_VAL_NOTIFICATIONLIMIT]
+
+    def test_enabled(self):
+        return self.config[CONFIG_VAL_TESTENABLED]
+
+    def page_enabled(self, page_ID):
+        try:
+            return self.config[page_ID]
+        except KeyError:
+            return False
+
 # Status of recent notifications
 class NotificationStatus:
     def __init__(self):
@@ -123,9 +151,9 @@ class NotificationStatus:
 
 # Used to track and limit the number of notifications sent for each page
 class NotificationLimiter:
-    def __init__(self, pages, interval, limit):
-        self.notification_interval = interval
-        self.notification_limit = limit
+    def __init__(self, pages):
+        self.notification_interval = 60
+        self.notification_limit = 2
         self.page_notifications = {}
         for page in pages:
             self.page_notifications[page.ID] = NotificationStatus()
@@ -133,9 +161,13 @@ class NotificationLimiter:
     def get_notification_status(self, ID):
         return self.page_notifications[ID]
 
+    def update_limits(self, interval, limit):
+        self.notification_interval = interval
+        self.notification_limit = limit
+
 # Simple page
 class Page:
-    def __init__(self, edition, name, url, stock_xpath, price_xpath, cart_xpath=None):
+    def __init__(self, edition, name, url, stock_xpath, price_xpath, cart_xpath=None, test=False):
         # Console edition
         self.edition = edition
         # Page name
@@ -150,6 +182,8 @@ class Page:
         self.price_xpath = price_xpath
         # Xpath to "add to cart" button
         self.cart_xpath = cart_xpath
+        # Whether page used for testing
+        self.test = test
 
 # Amazon page
 class AmazonPage(Page):
@@ -179,22 +213,22 @@ pages.append(Page(
 PAGE_TOPO,
 "https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5-digital.html",
 "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
+"//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span",))
+
+pages.append(Page(
+"Digital",
+PAGE_TOPO,
+"https://www.topocentras.lt/zaidimu-pultas-sony-dualsense-ps5.html",
+"//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
+"//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span",
+test=True))
+
+pages.append(Page(
+"Standard",
+PAGE_TOPO,
+"https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5.html",
+"//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
 "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
-
-# test
-# pages.append(Page(
-# "Digital",
-# PAGE_TOPO,
-# "https://www.topocentras.lt/zaidimu-pultas-sony-dualsense-ps5.html",
-# "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
-# "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
-
-# pages.append(Page(
-# "Standard",
-# PAGE_TOPO,
-# "https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5.html",
-# "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
-# "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
 
 # pages.append(Page(
 # 'Digital',
@@ -234,16 +268,15 @@ PAGE_TOPO,
 # "//*[@id='outOfStockContainer']",
 # "//*[@id='add-to-cart-or-refresh']/div[1]/div/div[1]/span"))
 
+pages.append(AmazonPage(
+"Digital",
+PAGE_AMAZONUK,
+"https://www.amazon.co.uk/PlayStation-5-Digital-Edition-Console/dp/B08H97NYGP",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']",
+"//*[@id='a-autoid-16-announce']",
+"//*[@id='a-autoid-17-announce']"))
 
-# pages.append(AmazonPage(
-# "Digital",
-# PAGE_AMAZONUK,
-# "https://www.amazon.co.uk/PlayStation-5-Digital-Edition-Console/dp/B08H97NYGP",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-16-announce']",
-# "//*[@id='a-autoid-17-announce']"))
-#
 # pages.append(AmazonPage(
 # "Digital",
 # PAGE_AMAZONDE,
@@ -269,16 +302,16 @@ PAGE_AMAZONPL,
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-16-announce']",
 "//*[@id='a-autoid-17-announce']"))
-#
-# pages.append(AmazonPage(
-# "Standard",
-# PAGE_AMAZONIT,
-# "https://www.amazon.it/Playstation-Sony-PlayStation-5/dp/B08KKJ37F7",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-13-announce']",
-# "//*[@id='a-autoid-14-announce']"))
-#
+
+pages.append(AmazonPage(
+"Standard",
+PAGE_AMAZONIT,
+"https://www.amazon.it/Playstation-Sony-PlayStation-5/dp/B08KKJ37F7",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']",
+"//*[@id='a-autoid-13-announce']",
+"//*[@id='a-autoid-14-announce']"))
+
 pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONIT,
@@ -288,25 +321,25 @@ PAGE_AMAZONIT,
 "//*[@id='a-autoid-13-announce']",
 "//*[@id='a-autoid-14-announce']"))
 
-#test
-# pages.append(AmazonPage(
-# "Digital",
-# PAGE_AMAZONIT,
-# "https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-13-announce']",
-# "//*[@id='a-autoid-14-announce']"))
-#
-# pages.append(AmazonPage(
-# "Standard",
-# PAGE_AMAZONES,
-# "https://www.amazon.es/dp/B08KKJ37F7",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-13-announce']",
-# "//*[@id='a-autoid-14-announce']"))
-#
+pages.append(AmazonPage(
+"Digital",
+PAGE_AMAZONIT,
+"https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']",
+"//*[@id='a-autoid-13-announce']",
+"//*[@id='a-autoid-14-announce']",
+test=True))
+
+pages.append(AmazonPage(
+"Standard",
+PAGE_AMAZONES,
+"https://www.amazon.es/dp/B08KKJ37F7",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']",
+"//*[@id='a-autoid-13-announce']",
+"//*[@id='a-autoid-14-announce']"))
+
 pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONES,
@@ -341,7 +374,8 @@ PAGE_AMAZONES,
 # "//*[@id='a-autoid-13-announce']",
 # "//*[@id='a-autoid-14-announce']"))
 
-NOTIFICATION_LIMITER = NotificationLimiter(pages, 60, 2)
+NOTIFICATION_LIMITER = NotificationLimiter(pages)
+CONFIG_MANAGER = ConfigManager()
 
 def randinrange(range):
     return range[0] + (range[1]-range[0])*random.random()
@@ -375,7 +409,6 @@ def ps5_detected(page, reason, price):
 
     print_text = " | ".join([title, message])
     logging.info(print_text)
-    sys.stderr.write(print_text)
 
     if can_send_notification:
         notify(title, message, page.url)
@@ -397,6 +430,8 @@ def stock_price_from_xpath(driver, page):
 
 def detect_amazon(page, stock, price):
     if stock == '':
+        msg = "Amazon page empty stock element: " + page.ID
+        logging.warning(msg)
         return
     if page.name == PAGE_AMAZONPL:
         if 'Obecnie niedostępny' not in stock:
@@ -464,17 +499,22 @@ def check_addtocart(driver, cart_xpath):
 logging.info("Starting loop...")
 while True:
     start = time.time()
+    CONFIG_MANAGER.update_config()
+    NOTIFICATION_LIMITER.update_limits(CONFIG_MANAGER.get_notification_interval(), CONFIG_MANAGER.get_notification_limit())
     for page in pages:
+        if not CONFIG_MANAGER.page_enabled(page.ID):
+            continue
+        if page.test and (not CONFIG_MANAGER.test_enabled()):
+            continue
+
         try:
             DRIVER.get(page.url)
         except TimeoutException:
             msg = "Selenium timeout. Skipping page: " + page.ID
-            sys.stderr.write(msg)
             logging.warning(msg)
             continue
         except InvalidSessionIdException:
             msg = "InvalidSessionIdException. Restarting program."
-            sys.stderr.write(msg)
             logging.error(msg)
             DRIVER.quit()
             VDISPLAY.stop()
@@ -482,7 +522,6 @@ while True:
         except:
             exc, _, _ = sys.exc_info()
             msg = "Skipping page: " + page.ID + ' due to ' + str(exc)
-            sys.stderr.write(msg)
             logging.error(msg)
             continue
 
