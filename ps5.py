@@ -429,8 +429,7 @@ def stock_price_from_xpath(driver, page):
 
 def detect_amazon(page, stock, price):
     if stock == '':
-        msg = "Amazon page empty stock element: " + page.ID
-        logging.warning(msg)
+        logging.warning("Amazon page empty stock element: " + page.ID)
         return
     if page.name == PAGE_AMAZONPL:
         if 'Obecnie niedostępny' not in stock:
@@ -509,19 +508,16 @@ while True:
         try:
             DRIVER.get(page.url)
         except TimeoutException:
-            msg = "Selenium timeout. Skipping page: " + page.ID
-            logging.warning(msg)
+            logging.warning("Selenium timeout. Skipping page: " + page.ID)
             continue
         except InvalidSessionIdException:
-            msg = "InvalidSessionIdException. Restarting program."
-            logging.error(msg)
+            logging.error("InvalidSessionIdException. Restarting program.")
             DRIVER.quit()
             VDISPLAY.stop()
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         except:
             exc, _, _ = sys.exc_info()
-            msg = "Skipping page: " + page.ID + ' due to ' + str(exc)
-            logging.error(msg)
+            logging.error("Skipping page: " + page.ID + ' due to ' + str(exc))
             continue
 
         # Amazon pages that need clicking to access PS5 page
@@ -557,7 +553,6 @@ while True:
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 ps5_detected(page, 'empty result', price)
 
-    end = time.time()
-    msg = "Loop pass completed (" + str(round(end-start)) + "s)"
-    logging.info(msg)
     DRIVER.delete_all_cookies()
+    end = time.time()
+    logging.info("Loop pass completed (" + str(round(end-start)) + "s)")
