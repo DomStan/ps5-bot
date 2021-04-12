@@ -108,8 +108,7 @@ class ConfigManager:
     CONFIG_VAL_NOTIFICATIONINTERVAL = 'Notification interval'
     CONFIG_VAL_NOTIFICATIONLIMIT = 'Notification limit'
     def __init__(self):
-        self.config = {}
-        self.config = json.load(open(self.CONFIG_FNAME))
+        self.update_config()
 
     def update_config(self):
         self.config = json.load(open(self.CONFIG_FNAME))
