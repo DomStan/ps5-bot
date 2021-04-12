@@ -399,7 +399,7 @@ def ps5_detected(page, reason, price):
                 limit_reached = True
 
     title = page.ID
-    message = " ".join([price, reason])
+    message = " ".join([reason, price])
 
     if limit_reached:
         message = "Limit reached! " + message
