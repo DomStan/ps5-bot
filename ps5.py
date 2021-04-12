@@ -109,19 +109,19 @@ class ConfigManager:
     CONFIG_VAL_NOTIFICATIONLIMIT = 'Notification limit'
     def __init__(self):
         self.config = {}
-        self.config = json.load(open(CONFIG_FNAME))
+        self.config = json.load(open(self.CONFIG_FNAME))
 
     def update_config(self):
-        self.config = json.load(open(CONFIG_FNAME))
+        self.config = json.load(open(self.CONFIG_FNAME))
 
     def get_notification_interval(self):
-        return self.config[CONFIG_VAL_NOTIFICATIONINTERVAL]
+        return self.config[self.CONFIG_VAL_NOTIFICATIONINTERVAL]
 
     def get_notification_limit(self):
-        return self.config[CONFIG_VAL_NOTIFICATIONLIMIT]
+        return self.config[self.CONFIG_VAL_NOTIFICATIONLIMIT]
 
     def test_enabled(self):
-        return self.config[CONFIG_VAL_TESTENABLED]
+        return self.config[self.CONFIG_VAL_TESTENABLED]
 
     def page_enabled(self, page_ID):
         try:
