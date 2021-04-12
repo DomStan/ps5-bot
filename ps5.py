@@ -371,9 +371,9 @@ def ps5_detected(page, reason, price):
         message = "Limit reached! " + message
     if not can_send_notification:
         message = "Limited! " + message
-        logging.warning("Notification limit reached.\n")
+        logging.warning("Notification limit reached.")
 
-    print_text = "\n".join(['\n', title, message, '\n'])
+    print_text = " | ".join([title, message])
     logging.info(print_text)
     sys.stderr.write(print_text)
 
@@ -468,7 +468,7 @@ while True:
         try:
             DRIVER.get(page.url)
         except TimeoutException:
-            msg = "Selenium timeout. Skipping page.\n"
+            msg = "Selenium timeout. Skipping page: " + page.ID
             sys.stderr.write(msg)
             logging.warning(msg)
             continue
@@ -479,9 +479,9 @@ while True:
             DRIVER.quit()
             VDISPLAY.stop()
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
-        except Exception:
+        except:
             exc, _, _ = sys.exc_info()
-            msg = "Skipping page. " + str(exc)
+            msg = "Skipping page: " + page.ID + ' due to ' + str(exc)
             sys.stderr.write(msg)
             logging.error(msg)
             continue
