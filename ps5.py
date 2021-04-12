@@ -187,8 +187,8 @@ class Page:
 
 # Amazon page
 class AmazonPage(Page):
-    def __init__(self, edition, name, url, stock_xpath, price_xpath, sed_button_xpath, ded_button_xpath, cart_xpath=None):
-        super().__init__(edition, name, url, stock_xpath, price_xpath, cart_xpath=cart_xpath)
+    def __init__(self, edition, name, url, stock_xpath, price_xpath, sed_button_xpath, ded_button_xpath, cart_xpath=None, test=False):
+        super().__init__(edition, name, url, stock_xpath, price_xpath, cart_xpath=cart_xpath, test=test)
         # Button to select standard ps5 edition
         self.sed_button_xpath = sed_button_xpath
         # Button to select digital ps5 edition
