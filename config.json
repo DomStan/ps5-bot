@@ -1,4 +1,9 @@
-{"Test enabled": false,
+{
+"Test enabled": false,
+"Verbose": false,
+"Notification device": "iphone",
+"Notification token": "a6j96sdv4z8j3jifiofo2for72fr6b",
+"Notification userid": "ucseovragtfce3ibsnocdxx64x3bx4",
 "Notification interval": 60,
 "Notification limit": 2,
 "Topocentras.lt Digital": true,
@@ -16,4 +21,5 @@
 "Amazon.nl Digital": false,
 "Amazon.nl Standard": false,
 "Amazon.co.uk Digital": false,
-"Amazon.co.uk Standard": false}
+"Amazon.co.uk Standard": false
+}

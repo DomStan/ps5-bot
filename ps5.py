@@ -71,7 +71,7 @@ PROFILE.set_preference("webgl.disabled", True)
 
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
-DRIVER.set_page_load_timeout(5)
+DRIVER.set_page_load_timeout(3)
 
 # Logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -104,9 +104,13 @@ atexit.register(exit_handler)
 # App configuration manager
 class ConfigManager:
     CONFIG_FNAME = 'config.json'
-    CONFIG_VAL_TESTENABLED = 'Test enabled'
-    CONFIG_VAL_NOTIFICATIONINTERVAL = 'Notification interval'
-    CONFIG_VAL_NOTIFICATIONLIMIT = 'Notification limit'
+    CONFIG_VAL_TEST_ENABLED = 'Test enabled'
+    CONFIG_VAL_VERBOSE = 'Verbose'
+    CONFIG_VAL_NOTIFICATION_INTERVAL = 'Notification interval'
+    CONFIG_VAL_NOTIFICATION_LIMIT = 'Notification limit'
+    CONFIG_VAL_NOTIFICATION_TOKEN = 'Notification token'
+    CONFIG_VAL_NOTIFICATION_USERID = 'Notification userid'
+    CONFIG_VAL_NOTIFICATION_DEVICE = 'Notification device'
     def __init__(self):
         self.update_config()
 
@@ -114,13 +118,22 @@ class ConfigManager:
         self.config = json.load(open(self.CONFIG_FNAME))
 
     def get_notification_interval(self):
-        return self.config[self.CONFIG_VAL_NOTIFICATIONINTERVAL]
+        return self.config[self.CONFIG_VAL_NOTIFICATION_INTERVAL]
 
     def get_notification_limit(self):
-        return self.config[self.CONFIG_VAL_NOTIFICATIONLIMIT]
+        return self.config[self.CONFIG_VAL_NOTIFICATION_LIMIT]
+
+    def get_notification_device(self):
+        return self.config[self.CONFIG_VAL_NOTIFICATION_DEVICE]
+
+    def get_notification_token(self):
+        return self.config[self.CONFIG_VAL_NOTIFICATION_TOKEN]
+
+    def get_notification_userid(self):
+        return self.config[self.CONFIG_VAL_NOTIFICATION_USERID]
 
     def test_enabled(self):
-        return self.config[self.CONFIG_VAL_TESTENABLED]
+        return self.config[self.CONFIG_VAL_TEST_ENABLED]
 
     def page_enabled(self, page_ID):
         try:
@@ -505,26 +518,21 @@ while True:
         if page.test and (not CONFIG_MANAGER.test_enabled()):
             continue
 
-        retry = True
-        while retry:
-            try:
-                DRIVER.get(page.url)
-                retry = False
-            except TimeoutException:
-                logging.warning("Selenium timeout. Retrying page: " + page.ID)
-                retry = True
-                # continue
-            except InvalidSessionIdException:
-                logging.error("InvalidSessionIdException. Restarting program.")
-                retry = False
-                DRIVER.quit()
-                VDISPLAY.stop()
-                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
-            except:
-                exc, _, _ = sys.exc_info()
-                logging.error("Skipping page: " + page.ID + ' due to ' + str(exc))
-                retry = False
-                continue
+        try:
+            DRIVER.get(page.url)
+        except TimeoutException:
+            logging.warning("Selenium timeout for page: " + page.ID)
+            # continue
+        except InvalidSessionIdException:
+            logging.error("InvalidSessionIdException. Restarting program.")
+            DRIVER.quit()
+            VDISPLAY.stop()
+            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+        except:
+            exc, _, _ = sys.exc_info()
+            logging.error("Skipping page: " + page.ID + ' due to ' + str(exc))
+            continue
+
 
         # Amazon pages that need clicking to access PS5 page
         # if page.name in (PAGE_AMAZONDE):
