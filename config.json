@@ -1,6 +1,7 @@
 {
 "Test enabled": false,
 "Verbose": false,
+"Page load timeout": 5,
 "Notification device": "iphone",
 "Notification token": "a6j96sdv4z8j3jifiofo2for72fr6b",
 "Notification userid": "ucseovragtfce3ibsnocdxx64x3bx4",

@@ -106,6 +106,7 @@ class ConfigManager:
     CONFIG_FNAME = 'config.json'
     CONFIG_VAL_TEST_ENABLED = 'Test enabled'
     CONFIG_VAL_VERBOSE = 'Verbose'
+    CONFIG_VAL_PAGE_LOAD_TIMEOUT = 'Page load timeout'
     CONFIG_VAL_NOTIFICATION_INTERVAL = 'Notification interval'
     CONFIG_VAL_NOTIFICATION_LIMIT = 'Notification limit'
     CONFIG_VAL_NOTIFICATION_TOKEN = 'Notification token'
@@ -131,6 +132,9 @@ class ConfigManager:
 
     def get_notification_userid(self):
         return self.config[self.CONFIG_VAL_NOTIFICATION_USERID]
+
+    def get_page_load_timeout(self):
+        return self.config[self.CONFIG_VAL_PAGE_LOAD_TIMEOUT]
 
     def test_enabled(self):
         return self.config[self.CONFIG_VAL_TEST_ENABLED]
@@ -522,6 +526,8 @@ while True:
             DRIVER.get(page.url)
         except TimeoutException:
             logging.warning("Selenium timeout for page: " + page.ID)
+            DRIVER.refresh()
+            time.sleep(2)
         except InvalidSessionIdException:
             logging.error("InvalidSessionIdException. Restarting program.")
             DRIVER.quit()
