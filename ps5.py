@@ -513,7 +513,7 @@ while True:
             except TimeoutException:
                 logging.warning("Selenium timeout. Retrying page: " + page.ID)
                 retry = True
-                continue
+                # continue
             except InvalidSessionIdException:
                 logging.error("InvalidSessionIdException. Restarting program.")
                 retry = False
