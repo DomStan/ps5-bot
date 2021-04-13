@@ -505,20 +505,26 @@ while True:
         if page.test and (not CONFIG_MANAGER.test_enabled()):
             continue
 
-        try:
-            DRIVER.get(page.url)
-        except TimeoutException:
-            logging.warning("Selenium timeout. Skipping page: " + page.ID)
-            continue
-        except InvalidSessionIdException:
-            logging.error("InvalidSessionIdException. Restarting program.")
-            DRIVER.quit()
-            VDISPLAY.stop()
-            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
-        except:
-            exc, _, _ = sys.exc_info()
-            logging.error("Skipping page: " + page.ID + ' due to ' + str(exc))
-            continue
+        retry = True
+        while retry:
+            try:
+                DRIVER.get(page.url)
+                retry = False
+            except TimeoutException:
+                logging.warning("Selenium timeout. Retrying page: " + page.ID)
+                retry = True
+                continue
+            except InvalidSessionIdException:
+                logging.error("InvalidSessionIdException. Restarting program.")
+                retry = False
+                DRIVER.quit()
+                VDISPLAY.stop()
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+            except:
+                exc, _, _ = sys.exc_info()
+                logging.error("Skipping page: " + page.ID + ' due to ' + str(exc))
+                retry = False
+                continue
 
         # Amazon pages that need clicking to access PS5 page
         # if page.name in (PAGE_AMAZONDE):
