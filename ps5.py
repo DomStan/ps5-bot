@@ -355,7 +355,6 @@ PAGE_AMAZONES,
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-13-announce']",
 "//*[@id='a-autoid-14-announce']"))
-//*[@id="availability"]/span
 
 "Digital",
 PAGE_AMAZONES,
