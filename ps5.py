@@ -140,6 +140,9 @@ class ConfigManager:
     def test_enabled(self):
         return self.config[self.CONFIG_VAL_TEST_ENABLED]
 
+    def verbose(self):
+        return self.config[self.CONFIG_VAL_VERBOSE]
+
     def page_enabled(self, page_ID):
         try:
             return self.config[page_ID]
@@ -419,6 +422,9 @@ def stock_price_from_xpath(driver, page):
         extracted_price = extract_text(driver.find_elements_by_xpath(page.price_xpath))
     except StaleElementReferenceException:
         restart_program()
+
+    if CONFIG_MANAGER.verbose():
+        logging.info(': '.join([page.ID, extracted_stock]))
 
     return (extracted_stock, extracted_price)
 
