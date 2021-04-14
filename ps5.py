@@ -288,7 +288,7 @@ pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONUK,
 "https://www.amazon.co.uk/PlayStation-5-Digital-Edition-Console/dp/B08H97NYGP",
-"//*[@id='availability']/span",
+"//*[@id='availability']/text()",
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-16-announce']",
 "//*[@id='a-autoid-17-announce']"))
@@ -314,7 +314,7 @@ pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONPL,
 "https://www.amazon.pl/Sony-PlayStation-5-Digital-Edition/dp/B08H98GVK8",
-"//*[@id='availability']/span",
+"//*[@id='availability']/text()",
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-16-announce']",
 "//*[@id='a-autoid-17-announce']"))
@@ -323,7 +323,7 @@ pages.append(AmazonPage(
 "Standard",
 PAGE_AMAZONIT,
 "https://www.amazon.it/Playstation-Sony-PlayStation-5/dp/B08KKJ37F7",
-"//*[@id='availability']/span",
+"//*[@id='availability']/text()",
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-13-announce']",
 "//*[@id='a-autoid-14-announce']"))
@@ -332,7 +332,7 @@ pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONIT,
 "https://www.amazon.it/_itm/dp/B08KJF2D25",
-"//*[@id='availability']/span",
+"//*[@id='availability']/text()",
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-13-announce']",
 "//*[@id='a-autoid-14-announce']"))
@@ -341,7 +341,7 @@ pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONIT,
 "https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
-"//*[@id='availability']/span",
+"//*[@id='availability']/text()",
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-13-announce']",
 "//*[@id='a-autoid-14-announce']",
@@ -351,7 +351,7 @@ pages.append(AmazonPage(
 "Standard",
 PAGE_AMAZONES,
 "https://www.amazon.es/dp/B08KKJ37F7",
-"//*[@id='availability']/span",
+"//*[@id='availability']/text()",
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-13-announce']",
 "//*[@id='a-autoid-14-announce']"))
@@ -360,7 +360,7 @@ pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONES,
 "https://www.amazon.es/dp/B08KJF2D25",
-"//*[@id='availability']/span",
+"//*[@id='availability']/text()",
 "//*[@id='priceblock_ourprice']",
 "//*[@id='a-autoid-13-announce']",
 "//*[@id='a-autoid-14-announce']"))
