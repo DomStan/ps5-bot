@@ -12,6 +12,7 @@ import requests
 import json
 
 from selenium import webdriver
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import InvalidSessionIdException
 from selenium.common.exceptions import TimeoutException
@@ -413,10 +414,13 @@ def stock_price_from_xpath(driver, page):
         el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(page.stock_xpath))
     except Exception:
         pass
-    extracted_stock = extract_text(driver.find_elements_by_xpath(page.stock_xpath))
-    extracted_price = extract_text(driver.find_elements_by_xpath(page.price_xpath))
-    return (extracted_stock, extracted_price)
+    try:
+        extracted_stock = extract_text(driver.find_elements_by_xpath(page.stock_xpath))
+        extracted_price = extract_text(driver.find_elements_by_xpath(page.price_xpath))
+    except StaleElementReferenceException:
+        restart_program()
 
+    return (extracted_stock, extracted_price)
 
 def detect_amazon(page, stock, price):
     if stock == '':
@@ -485,6 +489,12 @@ def check_addtocart(driver, cart_xpath):
     else:
         return True
 
+def restart_program():
+    notify("Restarting program.", "Check me.")
+    DRIVER.quit()
+    VDISPLAY.stop()
+    os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+
 logging.info("Starting loop...")
 while True:
     start = time.time()
@@ -502,9 +512,7 @@ while True:
             logging.warning("Selenium timeout for page: " + page.ID)
         except InvalidSessionIdException:
             logging.error("InvalidSessionIdException. Restarting program.")
-            DRIVER.quit()
-            VDISPLAY.stop()
-            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+            restart_program()
         except:
             exc, _, _ = sys.exc_info()
             logging.error("Skipping page: " + page.ID + ' due to ' + str(exc))
