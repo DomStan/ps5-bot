@@ -356,6 +356,7 @@ PAGE_AMAZONES,
 "//*[@id='a-autoid-13-announce']",
 "//*[@id='a-autoid-14-announce']"))
 
+pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONES,
 "https://www.amazon.es/dp/B08KJF2D25",
