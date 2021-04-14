@@ -526,8 +526,6 @@ while True:
             DRIVER.get(page.url)
         except TimeoutException:
             logging.warning("Selenium timeout for page: " + page.ID)
-            DRIVER.refresh()
-            time.sleep(2)
         except InvalidSessionIdException:
             logging.error("InvalidSessionIdException. Restarting program.")
             DRIVER.quit()
