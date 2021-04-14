@@ -203,7 +203,7 @@ class Page:
 
 # Amazon page
 class AmazonPage(Page):
-    def __init__(self, edition, name, url, stock_xpath, price_xpath, sed_button_xpath, ded_button_xpath, cart_xpath=None, test=False):
+    def __init__(self, edition, name, url, stock_xpath, price_xpath, sed_button_xpath=None, ded_button_xpath=None, cart_xpath=None, test=False):
         super().__init__(edition, name, url, stock_xpath, price_xpath, cart_xpath=cart_xpath, test=test)
         # Button to select standard ps5 edition
         self.sed_button_xpath = sed_button_xpath
@@ -278,64 +278,47 @@ PAGE_TOPO,
 # "//*[@id='our_price_display']",
 # cart_xpath="//*[@id='add_to_cart']"))
 
-# pages.append(Page(
-# PAGE_TECHNO,
-# "https://www.technorama.lt/playstation-5/24600-konsole-sony-playstation-5-standart-edition-white.html",
-# "//*[@id='outOfStockContainer']",
-# "//*[@id='add-to-cart-or-refresh']/div[1]/div/div[1]/span"))
-
 pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONUK,
 "https://www.amazon.co.uk/PlayStation-5-Digital-Edition-Console/dp/B08H97NYGP",
 "//*[@id='availability']/span",
-"//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-16-announce']",
-"//*[@id='a-autoid-17-announce']"))
+"//*[@id='priceblock_ourprice']"))
 
-# pages.append(AmazonPage(
-# "Digital",
-# PAGE_AMAZONDE,
-# "https://www.amazon.de/dp/B08H98GVK8",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-16-announce']",
-# "//*[@id='a-autoid-17-announce']"))
+pages.append(AmazonPage(
+"Digital",
+PAGE_AMAZONDE,
+"https://www.amazon.de/dp/B08H98GVK8",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']"))
 
-# pages.append(AmazonPage(
-# PAGE_AMAZONDE,
-# "https://www.amazon.de/dp/B08H93ZRK9",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-16-announce']",
-# "//*[@id='a-autoid-17-announce']"))
+pages.append(AmazonPage(
+"Standard",
+PAGE_AMAZONDE,
+"https://www.amazon.de/dp/B08H93ZRK9",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']"))
 
 pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONPL,
 "https://www.amazon.pl/Sony-PlayStation-5-Digital-Edition/dp/B08H98GVK8",
 "//*[@id='availability']/span",
-"//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-16-announce']",
-"//*[@id='a-autoid-17-announce']"))
+"//*[@id='priceblock_ourprice']"))
 
 pages.append(AmazonPage(
 "Standard",
 PAGE_AMAZONIT,
 "https://www.amazon.it/Playstation-Sony-PlayStation-5/dp/B08KKJ37F7",
 "//*[@id='availability']/span",
-"//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-13-announce']",
-"//*[@id='a-autoid-14-announce']"))
+"//*[@id='priceblock_ourprice']"))
 
 pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONIT,
 "https://www.amazon.it/_itm/dp/B08KJF2D25",
 "//*[@id='availability']/span",
-"//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-13-announce']",
-"//*[@id='a-autoid-14-announce']"))
+"//*[@id='priceblock_ourprice']"))
 
 pages.append(AmazonPage(
 "Digital",
@@ -343,8 +326,6 @@ PAGE_AMAZONIT,
 "https://www.amazon.it/Sony-PlayStation%C2%AE5-DualSenseTM-Wireless-Controller/dp/B08H99BPJN",
 "//*[@id='availability']/span",
 "//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-13-announce']",
-"//*[@id='a-autoid-14-announce']",
 test=True))
 
 pages.append(AmazonPage(
@@ -352,35 +333,28 @@ pages.append(AmazonPage(
 PAGE_AMAZONES,
 "https://www.amazon.es/dp/B08KKJ37F7",
 "//*[@id='availability']/span",
-"//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-13-announce']",
-"//*[@id='a-autoid-14-announce']"))
+"//*[@id='priceblock_ourprice']"))
 
 pages.append(AmazonPage(
 "Digital",
 PAGE_AMAZONES,
 "https://www.amazon.es/dp/B08KJF2D25",
 "//*[@id='availability']/span",
-"//*[@id='priceblock_ourprice']",
-"//*[@id='a-autoid-13-announce']",
-"//*[@id='a-autoid-14-announce']"))
+"//*[@id='priceblock_ourprice']"))
 
-# pages.append(AmazonPage(
-# PAGE_AMAZONFR,
-# "https://www.amazon.fr/PlayStation-%C3%89dition-Standard-DualSense-Couleur/dp/B08H93ZRK9",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-13-announce']",
-# "//*[@id='a-autoid-14-announce']"))
+pages.append(AmazonPage(
+"Standard",
+PAGE_AMAZONFR,
+"https://www.amazon.fr/PlayStation-%C3%89dition-Standard-DualSense-Couleur/dp/B08H93ZRK9",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']"))
 
-# pages.append(AmazonPage(
-# "Digital",
-# PAGE_AMAZONFR,
-# "https://www.amazon.fr/PlayStation-Digital-Manette-DualSense-Couleur/dp/B08H98GVK8",
-# "//*[@id='availability']/span",
-# "//*[@id='priceblock_ourprice']",
-# "//*[@id='a-autoid-13-announce']",
-# "//*[@id='a-autoid-14-announce']"))
+pages.append(AmazonPage(
+"Digital",
+PAGE_AMAZONFR,
+"https://www.amazon.fr/PlayStation-Digital-Manette-DualSense-Couleur/dp/B08H98GVK8",
+"//*[@id='availability']/span",
+"//*[@id='priceblock_ourprice']"))
 
 # pages.append(AmazonPage(
 # PAGE_AMAZONNL,
