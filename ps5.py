@@ -29,7 +29,7 @@ VDISPLAY.start()
 OPTIONS = Options()
 OPTIONS.add_argument("--headless")
 # Do not wait for page to fully load
-# OPTIONS.page_load_strategy = 'eager'
+OPTIONS.page_load_strategy = 'none'
 
 # Makes pages load faster
 PROFILE = webdriver.FirefoxProfile()
@@ -68,7 +68,7 @@ PROFILE.set_preference("plugin.default_plugin_disabled", False)
 PROFILE.set_preference("permissions.default.image", 2)
 PROFILE.set_preference("http.response.timeout", 5)
 PROFILE.set_preference("dom.max_script_run_time", 5)
-# PROFILE.set_preference("webgl.disabled", True)
+PROFILE.set_preference("webgl.disabled", True)
 
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
@@ -514,6 +514,7 @@ while True:
 
         try:
             DRIVER.get(page.url)
+            time.sleep(1)
         except TimeoutException:
             logging.warning("Selenium timeout for page: " + page.ID)
         except InvalidSessionIdException:
@@ -558,6 +559,5 @@ while True:
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 ps5_detected(page, 'empty result', price)
 
-    DRIVER.delete_all_cookies()
     end = time.time()
     logging.info("Loop pass completed (" + str(round(end-start)) + "s)")
