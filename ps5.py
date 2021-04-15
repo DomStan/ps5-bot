@@ -29,7 +29,7 @@ VDISPLAY.start()
 OPTIONS = Options()
 OPTIONS.add_argument("--headless")
 # Do not wait for page to fully load
-OPTIONS.page_load_strategy = 'eager'
+# OPTIONS.page_load_strategy = 'eager'
 
 # Makes pages load faster
 PROFILE = webdriver.FirefoxProfile()
