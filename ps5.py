@@ -73,6 +73,7 @@ PROFILE.set_preference("webgl.disabled", True)
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
 DRIVER.set_page_load_timeout(5)
+DRIVER.implicitly_wait(1)
 
 # Logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -413,10 +414,10 @@ def extract_text(element):
 
 def stock_price_from_xpath(driver, page):
     # Wait until the stock element has loaded, then extract it
-    try:
-        el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(page.stock_xpath))
-    except Exception:
-        pass
+    # try:
+    #     el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(page.stock_xpath))
+    # except Exception:
+    #     pass
     try:
         extracted_stock = extract_text(driver.find_elements_by_xpath(page.stock_xpath))
         extracted_price = extract_text(driver.find_elements_by_xpath(page.price_xpath))
