@@ -413,10 +413,10 @@ def extract_text(element):
 
 def stock_price_from_xpath(driver, page):
     # Wait until the stock element has loaded, then extract it
-    # try:
-    #     el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(page.stock_xpath))
-    # except Exception:
-    #     pass
+    try:
+        el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_xpath(page.stock_xpath))
+    except Exception:
+        pass
     try:
         extracted_stock = extract_text(driver.find_elements_by_xpath(page.stock_xpath))
         extracted_price = extract_text(driver.find_elements_by_xpath(page.price_xpath))
