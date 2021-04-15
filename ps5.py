@@ -515,7 +515,6 @@ while True:
 
         try:
             DRIVER.get(page.url)
-            DRIVER.refresh()
         except TimeoutException:
             logging.warning("Selenium timeout for page: " + page.ID)
         except InvalidSessionIdException:
