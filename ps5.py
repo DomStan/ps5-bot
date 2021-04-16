@@ -544,6 +544,8 @@ while True:
 
         try:
             DRIVER.get(page.url)
+            DRIVER.save_screenshot(page.ID)
+            logging.info(DRIVER.page_source)
         except TimeoutException:
             logging.warning("Selenium timeout for page: " + page.ID)
         except InvalidSessionIdException:
