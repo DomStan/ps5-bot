@@ -25,7 +25,7 @@ from xvfbwrapper import Xvfb
 VDISPLAY = Xvfb()
 VDISPLAY.start()
 
-Run firefox in headless mode
+# Run firefox in headless mode
 OPTIONS = Options()
 OPTIONS.add_argument("--headless")
 # Do not wait for page to fully load
