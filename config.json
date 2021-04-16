@@ -2,12 +2,13 @@
 "Test enabled": false,
 "Verbose": false,
 "Page load timeout": 5,
+"Implicit wait": 2,
 "Notification device": "iphone",
 "Notification token": "a6j96sdv4z8j3jifiofo2for72fr6b",
 "Notification userid": "ucseovragtfce3ibsnocdxx64x3bx4",
 "Notification interval": 60,
 "Notification limit": 2,
-"Topocentras.lt Digital": true,
+"Topocentras.lt Digital": false,
 "Topocentras.lt Standard": false,
 "Amazon.it Digital": true,
 "Amazon.it Standard": false,
@@ -21,6 +22,6 @@
 "Amazon.de Standard": false,
 "Amazon.nl Digital": false,
 "Amazon.nl Standard": false,
-"Amazon.co.uk Digital": false,
+"Amazon.co.uk Digital": true,
 "Amazon.co.uk Standard": false
 }

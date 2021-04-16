@@ -71,8 +71,6 @@ PROFILE.set_preference("dom.max_script_run_time", 5)
 
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
-DRIVER.set_page_load_timeout(5)
-DRIVER.implicitly_wait(2)
 
 # Logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -108,6 +106,7 @@ class ConfigManager:
     CONFIG_VAL_TEST_ENABLED = 'Test enabled'
     CONFIG_VAL_VERBOSE = 'Verbose'
     CONFIG_VAL_PAGE_LOAD_TIMEOUT = 'Page load timeout'
+    CONFIG_VAL_IMPLICIT_WAIT = 'Implicit wait'
     CONFIG_VAL_NOTIFICATION_INTERVAL = 'Notification interval'
     CONFIG_VAL_NOTIFICATION_LIMIT = 'Notification limit'
     CONFIG_VAL_NOTIFICATION_TOKEN = 'Notification token'
@@ -136,6 +135,9 @@ class ConfigManager:
 
     def get_page_load_timeout(self):
         return self.config[self.CONFIG_VAL_PAGE_LOAD_TIMEOUT]
+
+    def get_implicit_wait(self):
+        return self.config[self.CONFIG_VAL_IMPLICIT_WAIT]
 
     def test_enabled(self):
         return self.config[self.CONFIG_VAL_TEST_ENABLED]
@@ -371,6 +373,9 @@ PAGE_AMAZONFR,
 NOTIFICATION_LIMITER = NotificationLimiter(pages)
 CONFIG_MANAGER = ConfigManager()
 
+DRIVER.set_page_load_timeout(CONFIG_MANAGER.get_page_load_timeout())
+DRIVER.implicitly_wait(CONFIG_MANAGER.get_implicit_wait())
+
 def randinrange(range):
     return range[0] + (range[1]-range[0])*random.random()
 
@@ -506,6 +511,8 @@ while True:
     start = time.time()
     CONFIG_MANAGER.update_config()
     NOTIFICATION_LIMITER.update_limits(CONFIG_MANAGER.get_notification_interval(), CONFIG_MANAGER.get_notification_limit())
+    DRIVER.set_page_load_timeout(CONFIG_MANAGER.get_page_load_timeout())
+    DRIVER.implicitly_wait(CONFIG_MANAGER.get_implicit_wait())
     for page in pages:
         if not CONFIG_MANAGER.page_enabled(page.ID):
             continue
