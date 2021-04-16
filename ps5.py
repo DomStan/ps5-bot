@@ -73,6 +73,7 @@ PROFILE.set_preference("webgl.disabled", True)
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
 DRIVER.set_page_load_timeout(5)
+DRIVER.implicitly_wait(2)
 
 # Logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
@@ -558,6 +559,6 @@ while True:
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 ps5_detected(page, 'empty result', price)
 
-    time.sleep(randinrange([2, 3]))
+    # time.sleep(randinrange([3, 5]))
     end = time.time()
     logging.info("Loop pass completed (" + str(round(end-start)) + "s)")
