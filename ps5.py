@@ -83,7 +83,9 @@ PROFILE.set_preference("privacy.clearOnShutdown.cache", True)
 PROFILE.set_preference("privacy.clearOnShutdown.cookies", True)
 PROFILE.set_preference("privacy.clearOnShutdown.sessions", True)
 PROFILE.set_preference("privacy.donottrackheader.enabled", True)
-PROFILE.set_preference("dom.moduleScripts.enabled", True)
+PROFILE.set_preference("dom.moduleScripts.enabled", False)
+PROFILE.set_preference("javascript.enabled", False)
+
 
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
