@@ -25,11 +25,11 @@ from xvfbwrapper import Xvfb
 VDISPLAY = Xvfb()
 VDISPLAY.start()
 
-# Run firefox in headless mode
-# OPTIONS = Options()
-# OPTIONS.add_argument("--headless")
-# # Do not wait for page to fully load
-# OPTIONS.page_load_strategy = 'none'
+Run firefox in headless mode
+OPTIONS = Options()
+OPTIONS.add_argument("--headless")
+# Do not wait for page to fully load
+OPTIONS.page_load_strategy = 'none'
 
 # Makes pages load faster
 PROFILE = webdriver.FirefoxProfile()
@@ -544,8 +544,6 @@ while True:
 
         try:
             DRIVER.get(page.url)
-            DRIVER.save_screenshot(page.ID)
-            logging.info(DRIVER.page_source)
         except TimeoutException:
             logging.warning("Selenium timeout for page: " + page.ID)
         except InvalidSessionIdException:
@@ -590,7 +588,7 @@ while True:
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 ps5_detected(page, 'empty result', price)
 
-    # time.sleep(randinrange([3, 5]))
+    time.sleep(20)
     DRIVER.delete_all_cookies()
     end = time.time()
     logging.info("Loop pass completed (" + str(round(end-start)) + "s)")
