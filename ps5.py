@@ -69,6 +69,22 @@ PROFILE.set_preference("permissions.default.image", 2)
 PROFILE.set_preference("http.response.timeout", 5)
 PROFILE.set_preference("dom.max_script_run_time", 5)
 
+PROFILE.set_preference("privacy.socialtracking.block_cookies.enabled", True)
+PROFILE.set_preference("privacy.trackingprotection.annotate_channels", True)
+PROFILE.set_preference("privacy.trackingprotection.cryptomining.enabled", True)
+PROFILE.set_preference("privacy.trackingprotection.enabled", True)
+PROFILE.set_preference("privacy.trackingprotection.fingerprinting.enabled", True)
+PROFILE.set_preference("privacy.trackingprotection.pbmode.enabled", True)
+PROFILE.set_preference("services.sync.prefs.sync.privacy.trackingprotection.cryptomining.enabled", True)
+PROFILE.set_preference("services.sync.prefs.sync.privacy.trackingprotection.enabled", True)
+PROFILE.set_preference("services.sync.prefs.sync.privacy.trackingprotection.fingerprinting.enabled", True)
+PROFILE.set_preference("services.sync.prefs.sync.privacy.trackingprotection.pbmode.enabled", True)
+PROFILE.set_preference("privacy.clearOnShutdown.cache", True)
+PROFILE.set_preference("privacy.clearOnShutdown.cookies", True)
+PROFILE.set_preference("privacy.clearOnShutdown.sessions", True)
+PROFILE.set_preference("privacy.donottrackheader.enabled", True)
+PROFILE.set_preference("dom.moduleScripts.enabled", True)
+
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
 
