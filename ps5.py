@@ -26,10 +26,10 @@ VDISPLAY = Xvfb()
 VDISPLAY.start()
 
 # Run firefox in headless mode
-OPTIONS = Options()
-OPTIONS.add_argument("--headless")
-# Do not wait for page to fully load
-OPTIONS.page_load_strategy = 'none'
+# OPTIONS = Options()
+# OPTIONS.add_argument("--headless")
+# # Do not wait for page to fully load
+# OPTIONS.page_load_strategy = 'none'
 
 # Makes pages load faster
 PROFILE = webdriver.FirefoxProfile()
@@ -88,7 +88,7 @@ PROFILE.set_preference("javascript.enabled", False)
 
 
 global DRIVER
-DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
+DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver')
 
 # Logging setup
 logging.basicConfig(filename='logs/' + str(date.today()), format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
