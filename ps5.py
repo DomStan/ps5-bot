@@ -68,7 +68,6 @@ PROFILE.set_preference("plugin.default_plugin_disabled", False)
 PROFILE.set_preference("permissions.default.image", 2)
 PROFILE.set_preference("http.response.timeout", 5)
 PROFILE.set_preference("dom.max_script_run_time", 5)
-PROFILE.set_preference("webgl.disabled", True)
 
 global DRIVER
 DRIVER = webdriver.Firefox(firefox_profile=PROFILE, firefox_binary='/usr/bin/firefox', executable_path='./geckodriver', options=OPTIONS)
@@ -560,5 +559,6 @@ while True:
                 ps5_detected(page, 'empty result', price)
 
     # time.sleep(randinrange([3, 5]))
+    DRIVER.delete_all_cookies()
     end = time.time()
     logging.info("Loop pass completed (" + str(round(end-start)) + "s)")
