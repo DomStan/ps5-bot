@@ -107,6 +107,7 @@ class ConfigManager:
     CONFIG_VAL_VERBOSE = 'Verbose'
     CONFIG_VAL_PAGE_LOAD_TIMEOUT = 'Page load timeout'
     CONFIG_VAL_IMPLICIT_WAIT = 'Implicit wait'
+    CONFIG_VAL_EXPLICIT_WAIT = 'Explicit wait'
     CONFIG_VAL_NOTIFICATION_INTERVAL = 'Notification interval'
     CONFIG_VAL_NOTIFICATION_LIMIT = 'Notification limit'
     CONFIG_VAL_NOTIFICATION_TOKEN = 'Notification token'
@@ -138,6 +139,9 @@ class ConfigManager:
 
     def get_implicit_wait(self):
         return self.config[self.CONFIG_VAL_IMPLICIT_WAIT]
+
+    def get_explicit_wait(self):
+        return self.config[self.CONFIG_VAL_EXPLICIT_WAIT]
 
     def test_enabled(self):
         return self.config[self.CONFIG_VAL_TEST_ENABLED]
@@ -419,7 +423,8 @@ def extract_text(element):
 def stock_price_from_xpath(driver, page):
     # Wait until the stock element has loaded, then extract it
     try:
-        el = WebDriverWait(driver, timeout=5).until(lambda d: d.find_element_by_xpath(page.stock_xpath))
+        wait = CONFIG_MANAGER.get_explicit_wait()
+        el = WebDriverWait(driver, timeout=wait).until(lambda d: d.find_element_by_xpath(page.stock_xpath))
     except Exception:
         pass
     try:
