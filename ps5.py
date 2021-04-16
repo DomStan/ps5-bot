@@ -559,7 +559,7 @@ while True:
                 ps5_detected(page, 'empty result', price)
 
     try:
-        _ = WebDriverWait(DRIVER, timeout=randinrange([2, 3]))
+        time.sleep(randinrange([2, 3]))
     except:
         pass
     end = time.time()
