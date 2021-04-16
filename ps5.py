@@ -558,9 +558,6 @@ while True:
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 ps5_detected(page, 'empty result', price)
 
-    try:
-        time.sleep(randinrange([2, 3]))
-    except:
-        pass
+    time.sleep(randinrange([2, 3]))
     end = time.time()
     logging.info("Loop pass completed (" + str(round(end-start)) + "s)")
