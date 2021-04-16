@@ -504,7 +504,6 @@ def restart_program():
 logging.info("Starting loop...")
 while True:
     start = time.time()
-    random.shuffle(pages)
     CONFIG_MANAGER.update_config()
     NOTIFICATION_LIMITER.update_limits(CONFIG_MANAGER.get_notification_interval(), CONFIG_MANAGER.get_notification_limit())
     for page in pages:
@@ -559,5 +558,9 @@ while True:
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 ps5_detected(page, 'empty result', price)
 
+    try:
+        _ = WebDriverWait(DRIVER, timeout=randinrange([2, 3]))
+    except:
+        pass
     end = time.time()
     logging.info("Loop pass completed (" + str(round(end-start)) + "s)")
