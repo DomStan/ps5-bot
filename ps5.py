@@ -459,6 +459,7 @@ def stock_price_from_xpath(driver, page):
 def detect_amazon(page, stock, price):
     if stock == '':
         logging.warning("Amazon page empty stock element: " + page.ID)
+        restart_program()
         return
     if page.name == PAGE_AMAZONPL:
         if 'Obecnie niedostępny' not in stock:
