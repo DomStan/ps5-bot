@@ -392,6 +392,15 @@ PAGE_AMAZONFR,
 # "//*[@id='a-autoid-13-announce']",
 # "//*[@id='a-autoid-14-announce']"))
 
+OUTOFSTOCK = []
+OUTOFSTOCK.append('Obecnie niedostępny')
+OUTOFSTOCK.append('Non disponibile')
+OUTOFSTOCK.append('No disponible')
+OUTOFSTOCK.append('indisponible')
+OUTOFSTOCK.append('de ces vendeurs')
+OUTOFSTOCK.append('nicht verfügbar')
+OUTOFSTOCK.append('unavailable')
+
 NOTIFICATION_LIMITER = NotificationLimiter(pages)
 CONFIG_MANAGER = ConfigManager()
 
@@ -461,23 +470,10 @@ def detect_amazon(page, stock, price):
         logging.warning("Amazon page empty stock element: " + page.ID)
         restart_program()
         return
-    if page.name == PAGE_AMAZONPL:
-        if 'Obecnie niedostępny' not in stock:
+
+        if sum(map(lambda x: x in stock, OUTOFSTOCK)) > 0:
             ps5_detected(page, stock, price)
-    elif page.name == PAGE_AMAZONIT:
-        if 'Non disponibile' not in stock:
-            ps5_detected(page, stock, price)
-    elif page.name == PAGE_AMAZONES:
-        if 'No disponible' not in stock:
-            ps5_detected(page, stock, price)
-    elif page.name == PAGE_AMAZONFR:
-        if 'indisponible' not in stock and 'de ces vendeurs' not in stock:
-            ps5_detected(page, stock, price)
-    elif page.name == PAGE_AMAZONDE:
-        if 'nicht verfügbar' not in stock:
-            ps5_detected(page, stock, price)
-    elif 'unavailable' not in stock:
-        ps5_detected(page, stock, price)
+
 
 # def tryclickncheck(driver, button_xpath, stock_xpath, price_xpath, page_name):
 #     def tryclick(driver, button_xpath):
