@@ -471,8 +471,8 @@ def detect_amazon(page, stock, price):
         restart_program()
         return
 
-        if sum(map(lambda x: x in stock, OUTOFSTOCK)) == 0:
-            ps5_detected(page, stock, price)
+    if sum(map(lambda x: x in stock, OUTOFSTOCK)) == 0:
+        ps5_detected(page, stock, price)
 
 
 # def tryclickncheck(driver, button_xpath, stock_xpath, price_xpath, page_name):
