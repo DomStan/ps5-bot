@@ -471,7 +471,7 @@ def detect_amazon(page, stock, price):
         restart_program()
         return
 
-        if sum(map(lambda x: x in stock, OUTOFSTOCK)) == False:
+        if sum(map(lambda x: x in stock, OUTOFSTOCK)) == 0:
             ps5_detected(page, stock, price)
 
 
