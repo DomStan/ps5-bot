@@ -124,6 +124,7 @@ class ConfigManager:
     CONFIG_VAL_TEST_ENABLED = 'Test enabled'
     CONFIG_VAL_VERBOSE = 'Verbose'
     CONFIG_VAL_PAGE_LOAD_TIMEOUT = 'Page load timeout'
+    CONFIG_VAL_COOLDOWN = 'Cooldown time'
     CONFIG_VAL_IMPLICIT_WAIT = 'Implicit wait'
     CONFIG_VAL_EXPLICIT_WAIT = 'Explicit wait'
     CONFIG_VAL_NOTIFICATION_INTERVAL = 'Notification interval'
@@ -154,6 +155,9 @@ class ConfigManager:
 
     def get_page_load_timeout(self):
         return self.config[self.CONFIG_VAL_PAGE_LOAD_TIMEOUT]
+
+    def get_cooldown(self):
+        return self.config[self.CONFIG_VAL_COOLDOWN]
 
     def get_implicit_wait(self):
         return self.config[self.CONFIG_VAL_IMPLICIT_WAIT]
@@ -458,7 +462,7 @@ def stock_price_from_xpath(driver, page):
         extracted_stock = extract_text(driver.find_elements_by_xpath(page.stock_xpath))
         extracted_price = extract_text(driver.find_elements_by_xpath(page.price_xpath))
     except StaleElementReferenceException:
-        restart_program()
+        restart_program(page.id, page.url)
 
     if CONFIG_MANAGER.verbose():
         logging.info(': '.join([page.ID, extracted_stock]))
@@ -468,7 +472,7 @@ def stock_price_from_xpath(driver, page):
 def detect_amazon(page, stock, price):
     if stock == '':
         logging.warning("Amazon page empty stock element: " + page.ID)
-        restart_program()
+        restart_program(page.id, page.url)
         return
 
     if sum(map(lambda x: x in stock, OUTOFSTOCK)) == 0:
@@ -520,8 +524,8 @@ def check_addtocart(driver, cart_xpath):
     else:
         return True
 
-def restart_program():
-    notify("Restarting program.", "Check me.")
+def restart_program(reason, page_url):
+    notify("Restarting program.", "Reason: " + reason, url=page_url)
     DRIVER.quit()
     VDISPLAY.stop()
     os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
@@ -545,7 +549,7 @@ while True:
             logging.warning("Selenium timeout for page: " + page.ID)
         except InvalidSessionIdException:
             logging.error("InvalidSessionIdException. Restarting program.")
-            restart_program()
+            restart_program(page.id, page.url)
         except:
             exc, _, _ = sys.exc_info()
             logging.error("Skipping page: " + page.ID + ' due to ' + str(exc))
@@ -585,7 +589,7 @@ while True:
             if stock == '' and check_addtocart(DRIVER, page.cart_xpath):
                 ps5_detected(page, 'empty result', price)
 
-    time.sleep(20)
+    time.sleep(CONFIG_MANAGER.get_cooldown())
     DRIVER.delete_all_cookies()
     end = time.time()
     logging.info("Loop pass completed (" + str(round(end-start)) + "s)")

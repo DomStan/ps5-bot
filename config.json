@@ -1,8 +1,9 @@
 {
 "Test enabled": false,
-"Verbose": false,
+"Verbose": true,
 "Page load timeout": 5,
-"Implicit wait": 2,
+"Cooldown time": 15,
+"Implicit wait": 6,
 "Explicit wait": 3,
 "Notification device": "iphone",
 "Notification token": "a6j96sdv4z8j3jifiofo2for72fr6b",
