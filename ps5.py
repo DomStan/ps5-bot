@@ -132,6 +132,7 @@ class ConfigManager:
     CONFIG_VAL_NOTIFICATION_TOKEN = 'Notification token'
     CONFIG_VAL_NOTIFICATION_USERID = 'Notification userid'
     CONFIG_VAL_NOTIFICATION_DEVICE = 'Notification device'
+
     def __init__(self):
         self.update_config()
 
@@ -277,38 +278,6 @@ PAGE_TOPO,
 "https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5.html",
 "//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
 "//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
-
-# pages.append(Page(
-# 'Digital',
-# PAGE_TOPO,
-# "https://www.topocentras.lt/catalogsearch/result/?q=playstation%205",
-# "//*[@id='categoryPage']/div[3]/div[1]/div[7]/div[3]/div/span",
-# "//*[@id='filterContainer']/div[1]/strong"))
-
-# pages.append(Page(
-# PAGE_GAMEROOM,
-# # "https://gameroom.lt/lt/playstation-4-pro-konsoles/products/zaidimu-konsole-sony-playstation-4-ps4-pro-1tb-439",
-# "https://gameroom.lt/lt/playstation-5-konsoles/products/playstation-5-zaidimu-konsole-825gb-ps5-4299",
-# # "https://gameroom.lt/lt/playstation-5-konsoles/products/playstation-5-digital-edition-zaidimu-konsole-825gb-ps5-4300",
-# "//*[@id='availability_value']",
-# "//*[@id='our_price_display']",
-# cart_xpath="//*[@id='add_to_cart']"))
-
-# pages.append(Page(
-# 'Digital',
-# PAGE_GAMEROOM,
-# "https://gameroom.lt/lt/playstation-5-konsoles/products/playstation-5-digital-edition-zaidimu-konsole-825gb-ps5-dualsense-valdiklis-pakrovimo-stovas-5725",
-# "//*[@id='availability_value']",
-# "//*[@id='our_price_display']",
-# cart_xpath="//*[@id='add_to_cart']"))
-
-# pages.append(Page(
-# 'Digital',
-# PAGE_GAMEROOM,
-# "https://gameroom.lt/lt/sony-playstation/products/the-last-of-us-part-ii-654",
-# "//*[@id='availability_value']",
-# "//*[@id='our_price_display']",
-# cart_xpath="//*[@id='add_to_cart']"))
 
 pages.append(AmazonPage(
 "Digital",
@@ -462,7 +431,7 @@ def stock_price_from_xpath(driver, page):
         extracted_stock = extract_text(driver.find_elements_by_xpath(page.stock_xpath))
         extracted_price = extract_text(driver.find_elements_by_xpath(page.price_xpath))
     except StaleElementReferenceException:
-        restart_program(page.id, page.url)
+        restart_program(page.ID, page.url)
 
     if CONFIG_MANAGER.verbose():
         logging.info(': '.join([page.ID, extracted_stock]))
@@ -472,7 +441,7 @@ def stock_price_from_xpath(driver, page):
 def detect_amazon(page, stock, price):
     if stock == '':
         logging.warning("Amazon page empty stock element: " + page.ID)
-        restart_program(page.id, page.url)
+        restart_program(page.ID, page.url)
         return
 
     if sum(map(lambda x: x in stock, OUTOFSTOCK)) == 0:
@@ -549,7 +518,7 @@ while True:
             logging.warning("Selenium timeout for page: " + page.ID)
         except InvalidSessionIdException:
             logging.error("InvalidSessionIdException. Restarting program.")
-            restart_program(page.id, page.url)
+            restart_program(page.ID, page.url)
         except:
             exc, _, _ = sys.exc_info()
             logging.error("Skipping page: " + page.ID + ' due to ' + str(exc))
