@@ -183,6 +183,7 @@ class NotificationStatus:
     def __init__(self):
         self.last_notification_sent = 0.0
         self.recent_notifications = 0
+        self.page_healthy = True
 
     def notification_sent(self):
         self.last_notification_sent = time.time()
@@ -198,11 +199,17 @@ class NotificationStatus:
         else:
             return False
 
+    def is_healthy(self):
+        return self.page_healthy
+
+    def unhealthy(self):
+        self.page_healthy = False
+
 # Used to track and limit the number of notifications sent for each page
 class NotificationLimiter:
     def __init__(self, pages):
-        self.notification_interval = 60
-        self.notification_limit = 2
+        self.notification_interval = 600
+        self.notification_limit = 1
         self.page_notifications = {}
         for page in pages:
             self.page_notifications[page.ID] = NotificationStatus()
@@ -383,14 +390,19 @@ DRIVER.implicitly_wait(CONFIG_MANAGER.get_implicit_wait())
 def randinrange(range):
     return range[0] + (range[1]-range[0])*random.random()
 
+def get_page_notification_status(page_id):
+    try:
+        return NOTIFICATION_LIMITER.get_notification_status(page_id)
+    except KeyError:
+        logging.error("Notification status could not be found for page: " + page_id)
+        return None
+
 def ps5_detected(page, reason, price):
     notification_status = None
     can_send_notification = False
     limit_reached = False
-    try:
-        notification_status = NOTIFICATION_LIMITER.get_notification_status(page.ID)
-    except KeyError:
-        logging.error("Notification limit could not be found for page: " + page.ID)
+
+    notification_status = get_page_notification_status(page.ID)
 
     if notification_status is not None:
         notification_interval = NOTIFICATION_LIMITER.notification_interval
@@ -438,10 +450,16 @@ def stock_price_from_xpath(driver, page):
 
     return (extracted_stock, extracted_price)
 
+def page_broken(message, page_id, page_url):
+    notification_status = get_page_notification_status(page_id)
+    if notification_status.is_healthy():
+        notification_status.unhealthy()
+        notify(message, page_id, url=page_url)
+
 def detect_amazon(page, stock, price):
     if stock == '':
         logging.warning("Amazon page empty stock element: " + page.ID)
-        # notify("Empty stock element", page.ID, url=page.url)
+        page_broken("Empty stock element", page.ID, page.url)
         return
 
     if sum(map(lambda x: x in stock, OUTOFSTOCK)) == 0:
