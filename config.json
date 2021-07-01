@@ -1,9 +1,9 @@
 {
 "Test enabled": false,
 "Verbose": true,
-"Page load timeout": 3,
-"Cooldown time": 0,
-"Implicit wait": 5,
+"Page load timeout": 8,
+"Cooldown time": 2,
+"Implicit wait": 6,
 "Explicit wait": 3,
 "Notification device": "iphone",
 "Notification token": "a6j96sdv4z8j3jifiofo2for72fr6b",
@@ -11,10 +11,10 @@
 "Notification interval": 300,
 "Notification limit": 1,
 "Topocentras.lt Digital": true,
-"Topocentras.lt Standard": true,
+"Topocentras.lt Standard": false,
 "Amazon.it Digital": true,
 "Amazon.it Standard": false,
-"Amazon.es Digital": false,
+"Amazon.es Digital": true,
 "Amazon.es Standard": false,
 "Amazon.pl Digital": false,
 "Amazon.pl Standard": false,
@@ -27,3 +27,4 @@
 "Amazon.co.uk Digital": false,
 "Amazon.co.uk Standard": false
 }
+
