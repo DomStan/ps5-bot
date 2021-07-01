@@ -283,8 +283,8 @@ pages.append(Page(
 "Standard",
 PAGE_TOPO,
 "https://www.topocentras.lt/zaidimu-kompiuteris-sony-playstation-5.html",
-"//*[@id='productPage']/div[2]/div[2]/div[1]/h1",
-"//*[@id='productPage']/div[3]/div[2]/div[2]/div/div[1]/div/div/div[3]/span"))
+"//*[@id='productPage']/div/div/article/div[2]/div[2]/div/h1",
+"//*[@id='productPage']/div[2]/div/article/div[2]/div[2]/div[2]/div[1]/div[2]/div[1]/span",))
 
 pages.append(AmazonPage(
 "Digital",
